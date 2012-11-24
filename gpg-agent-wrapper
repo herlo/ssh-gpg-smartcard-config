@@ -21,7 +21,6 @@ if [ "${fwd_SSH_AUTH_SOCK}" != "" ]; then
 fi
 
 source ${HOME}/.gpg-agent-info
-echo $GPG_AGENT_INFO
 export GPG_AGENT_INFO
 export SSH_AGENT_PID
 
