@@ -68,12 +68,15 @@ A rather tricky part of this configuration is to have a simple wrapper script, c
 
 **NOTE:** The above code has been altered to allow the ``.gpg-agent-info`` to run after SSH_AUTH_SOCK. Please see the CREDITS section below for details.
 
-The above **gpg-agent-wrapper** script is invoked in two ways.
+The above **gpg-agent-wrapper** script is invoked using X and bash (or favorite shell). Please ensure the following files exist as below.
 
 The X session::
 
   $ cat /etc/X11/xinit/xinitrc.d/01-xsession
   [ -f ${HOME}/.xsession ] && source ${HOME}/.xsession
+
+  $ ls -l /etc/X11/xinit/xinitrc.d/01-xsession
+  -rwxr-xr-x. 1 root root 53 Nov 23 10:54 /etc/X11/xinit/xinitrc.d/01-xsession
 
   $ cat ~/.xsession
   source ${HOME}/.gnupg/gpg-agent-wrapper
