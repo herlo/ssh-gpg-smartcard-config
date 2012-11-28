@@ -111,6 +111,8 @@ Included with the gemalto token and GnuPG Smartcard version 2 should be a docume
 Admin PIN
 ~~~~~~~~~
 
+::
+
   $ gpg --card-edit
   ..snip..
 
@@ -138,7 +140,9 @@ Then enter the New Admin PIN twice
 
 PIN
 ~~~
+
 ::
+
   1 - change PIN
   2 - unblock PIN
   3 - change Admin PIN
@@ -147,7 +151,7 @@ PIN
 
   Your selection? 1
 
-Enter the Current PIN
+  Enter the Current PIN
 
 .. image:: http://sexysexypenguins.com/misc/gpg-pin.png
 
@@ -159,7 +163,6 @@ Then enter the New PIN twice
 
 Generating an SSH Key using GnuPG
 ---------------------------------
-::
 
 There are several ways to generate an SSH Key using GnuPG. A common way is to link the new Authentication key to an already existing key::
 
