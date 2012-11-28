@@ -169,6 +169,14 @@ The shell rc file::
   ..snip..
 
 
+Verify SSH key is managed via gpg-agent
+---------------------------------------
+
+Assuming everything above is configured correctly, a simple test is performed with the SmartCard inserted::
+
+  $ ssh-add -L
+  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDL/XmU......BL0luE= cardno:00050000158A
+
 
 
 CREDITS
