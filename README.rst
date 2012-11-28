@@ -151,7 +151,7 @@ PIN
 
   Your selection? 1
 
-  Enter the Current PIN
+Enter the Current PIN
 
 .. image:: http://sexysexypenguins.com/misc/gpg-pin.png
 
@@ -174,10 +174,10 @@ There are several ways to generate an SSH Key using GnuPG. A common way is to li
   Secret key is available.
 
   pub  3072R/8A8F1D53  created: 2012-10-06  expires: never       usage: SC
-                       trust: ultimate      validity: ultimate
-  sub  3072R/4E2D6F5A  created: 2012-10-06  expires: 2022-12-30  usage: E
+                     trust: ultimate      validity: ultimate
   sub  3072R/2F15E06B  created: 2012-11-23  expires: 2022-11-21  usage: S
   sub  3072R/EB8B4EBD  created: 2012-11-24  expires: 2022-11-22  usage: E
+  sub  3072R/6BB325E9  created: 2012-11-24  expires: 2022-11-22  usage: A
   [ultimate] (1). Clint Savage <herlo1@gmail.com>
   [ultimate] (2)  Clint Savage <herlo@fedoraproject.org>
   [ultimate] (3)  Clint Savage <csavage@linuxfoundation.org>
