@@ -138,7 +138,7 @@ Then enter the New Admin PIN twice
 
 PIN
 ~~~
-
+::
   1 - change PIN
   2 - unblock PIN
   3 - change Admin PIN
@@ -159,6 +159,7 @@ Then enter the New PIN twice
 
 Generating an SSH Key using GnuPG
 ---------------------------------
+::
 
 There are several ways to generate an SSH Key using GnuPG. A common way is to link the new Authentication key to an already existing key::
 
