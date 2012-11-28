@@ -145,6 +145,15 @@ Edit the PIN::
 
   Your selection? 1
 
+Enter the Current PIN
+
+.. image:: http://sexysexypenguins.com/misc/gpg-pin.png
+
+Then enter the New PIN twice
+
+.. image:: http://sexysexypenguins.com/misc/gpg-new-pin.png
+
+**NOTE:** If the Admin PIN has not been entered, it may be required before changes are applied.
 
 Generating an SSH Key using GnuPG
 ---------------------------------
