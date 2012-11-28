@@ -98,10 +98,36 @@ The shell rc file::
 
   ..snip..
 
+Reload GNOME-Shell
+------------------
+
+Logout and Login of GNOME-Shell, reboot or what not.
+
 Setting the Admin PIN and PIN
 -----------------------------
 
 Included with the gemalto token and GnuPG Smartcard version 2 should be a document describing the default PIN values. There is a regular PIN, which is used to unlock the token for Signing, Encryption or Authentication. Additionally, there is an Admin PIN, which is used to reset the PIN and/or the Reset Code for the key itself.
+
+Edit the Admin PIN::
+
+  $ gpg --card-edit
+  ..snip..
+
+  gpg/card> admin
+  Admin commands are allowed
+
+  gpg/card> passwd
+  gpg: OpenPGP card no. D27600012401020000050000158A0000 detected
+
+  1 - change PIN
+  2 - unblock PIN
+  3 - change Admin PIN
+  4 - set the Reset Code
+  Q - quit
+
+  Your selection? 3
+
+.. image:: http://sexysexypenguins.com/misc/gpg-admin.png
 
 Generating an SSH Key using GnuPG
 ---------------------------------
