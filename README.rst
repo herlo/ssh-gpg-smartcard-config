@@ -90,5 +90,92 @@ Certain software must be installed, including ``gnupg2`` (which is probably alre
   .. snip ..
   Complete!
 
+Configure GNOME-Shell to use gpg-agent
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Turn off ssh-agent inside gnome-keyring-daemon::
+
+  $ gconftool-2 --type bool --set /apps/gnome-keyring/daemon-components/ssh false
+
+Configure gpg to use agent (only for smartcard)::
+
+  $ echo "use-agent" >> ~/.gnupg/gpg.conf
+
+Enable ssh-agent drop in replacement support for gpg-agent::
+
+  $ echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
+
+Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+A rather tricky part of this configuration is to have a simple wrapper script, called *gpg-agent-wrapper*::
+
+  $ cat ~/.gnupg/gpg-agent-wrapper
+  # Copyright (c) 2010 Diego E. Pettenò <flameeyes@gmail.com>
+  # Available under CC-BY license (Attribution)
+
+  if ! [ -f "${HOME}/.gpg-agent-info" ] || ! pgrep -u ${USER} gpg-agent >/dev/null; then
+    gpg-agent --daemon --enable-ssh-support --scdaemon-program /usr/bin/scdaemon --use-standard-socket --log-file ~/.gnupg/gpg-agent.log --write-env-file
+  fi
+
+  # for ssh-agent forwarding, override gnome-keyring though!
+  if [ -n ${SSH_AUTH_SOCK} ] && \
+      [ ${SSH_AUTH_SOCK#/tmp/keyring-} = ${SSH_AUTH_SOCK} ]; then
+
+      fwd_SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+  fi
+
+  export SSH_AUTH_SOCK
+
+  if [ "${fwd_SSH_AUTH_SOCK}" != "" ]; then
+      SSH_AUTH_SOCK=${fwd_SSH_AUTH_SOCK}
+      export SSH_AUTH_SOCK
+  fi
+
+  source ${HOME}/.gpg-agent-info
+  export GPG_AGENT_INFO
+  export SSH_AGENT_PID
+
+  GPG_TTY=$(tty)
+  export GPG_TTY
+
+**NOTE:** The above code has been altered to allow the ``.gpg-agent-info`` to run after SSH_AUTH_SOCK. Please see the CREDITS section below for details.
+
+The above **gpg-agent-wrapper** script is invoked in two ways.
+
+The X session::
+
+  $ cat /etc/X11/xinit/xinitrc.d/01-xsession
+  [ -f ${HOME}/.xsession ] && source ${HOME}/.xsession
+
+  $ cat ~/.xsession
+  source ${HOME}/.gnupg/gpg-agent-wrapper
+
+The shell rc file::
+
+  $ cat ~/.bashrc
+  # .bashrc
+
+  # Source global definitions
+  if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+  fi
+
+  ..snip..
+
+  # ssh authentication component
+  source ${HOME}/.gnupg/gpg-agent-wrapper
+
+  ..snip..
 
 
+
+
+CREDITS
+-------
+
+A special thanks to the following people and/or links.
+
+  * `How to use gpg with ssh (with smartcard section) <http://www.programmierecke.net/howto/gpg-ssh.html>`_
+  * `The GnuPG Smartcard HOWTO (Advanced Features) <http://www.gnupg.org/howtos/card-howto/en/smartcard-howto-single.html#id2507402>`_
+  * `Smart Cards and Secret Agents <http://blog.flameeyes.eu/2010/08/smart-cards-and-secret-agents>`_
