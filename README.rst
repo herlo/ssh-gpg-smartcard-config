@@ -101,7 +101,7 @@ The shell rc file::
 Reload GNOME-Shell
 ------------------
 
-Logout and Login of GNOME-Shell, reboot or what not.
+Reboot the machine works the best.
 
 Setting PINs
 ------------
@@ -242,7 +242,28 @@ Assuming everything above is configured correctly, a simple test is performed wi
   $ ssh-add -L
   ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDL/XmU......BL0luE= cardno:00050000158A
 
+Resetting the GPG SmartCard
+---------------------------
 
+In some cases, it's going to be useful to rest the SmartCard. It can be done interactively::
+
+  $ gpg-connect-agent
+  > /hex
+  > scd serialno
+  > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
+  > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
+  > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
+  > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
+  > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
+  > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
+  > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
+  > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
+  > scd apdu 00 e6 00 00
+  > scd apdu 00 44 00 00
+  > /echo card has been reset to factory defaults
+  > /bye
+
+**NOTE:** If desired, this file can be stored them in a file and run with "gpg-connect-agent < FILE".
 
 CREDITS
 -------
