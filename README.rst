@@ -253,40 +253,45 @@ In some cases, it's going to be useful to rest the SmartCard. It can be done int
   S SERIALNO D276000124...........00016E00000 0
   OK
   > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.              
+  D[0000]  69 82                                              i.
   OK
   > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.              
+  D[0000]  69 82                                              i.
   OK
   > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.              
+  D[0000]  69 82                                              i.
   OK
   > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
-  D[0000]  69 83                                              i.              
+  D[0000]  69 83                                              i.
   OK
   > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.              
+  D[0000]  69 82                                              i.
   OK
   > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.              
+  D[0000]  69 82                                              i.
   OK
   > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.              
+  D[0000]  69 82                                              i.
   OK
   > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
-  D[0000]  69 83                                              i.              
+  D[0000]  69 83                                              i.
   OK
   > scd apdu 00 e6 00 00
-  D[0000]  90 00                                              ..              
+  D[0000]  90 00                                              ..
   OK
   > scd apdu 00 44 00 00
-  D[0000]  90 00                                              ..              
+  D[0000]  90 00                                              ..
   OK
   > /echo card has been reset to factory defaults
   card has been reset to factory defaults
   > /bye
 
 **NOTE:** If desired, this file can be stored them in a file and run with "gpg-connect-agent < FILE".
+
+FILES
+-----
+
+`The github repository <https://github.com/herlo/ssh-gpg-smartcard-config/>`_ contains all the files to make the changes above. Please feel free to read through them.
 
 CREDITS
 -------
