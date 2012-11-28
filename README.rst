@@ -103,12 +103,13 @@ Reload GNOME-Shell
 
 Logout and Login of GNOME-Shell, reboot or what not.
 
-Setting the Admin PIN and PIN
------------------------------
+Setting PINs
+------------
 
 Included with the gemalto token and GnuPG Smartcard version 2 should be a document describing the default PIN values. There is a regular PIN, which is used to unlock the token for Signing, Encryption or Authentication. Additionally, there is an Admin PIN, which is used to reset the PIN and/or the Reset Code for the key itself.
 
-Edit the Admin PIN::
+Admin PIN
+~~~~~~~~~
 
   $ gpg --card-edit
   ..snip..
@@ -135,7 +136,8 @@ Then enter the New Admin PIN twice
 
 .. image:: http://sexysexypenguins.com/misc/gpg-new-admin.png
 
-Edit the PIN::
+PIN
+~~~
 
   1 - change PIN
   2 - unblock PIN
