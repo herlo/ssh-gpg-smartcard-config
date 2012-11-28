@@ -9,6 +9,7 @@ Examples below are using a Fedora 17 x86_64 fresh install, there are other tutor
 
 Generating an SSH Key using GnuPG
 ---------------------------------
+
 There are several ways to generate an SSH Key using GnuPG. A common way is to link the new Authentication key to an already existing key::
 
   $ gpg --edit-key 8A8F1D53
@@ -66,10 +67,10 @@ Once in the ``edit-key`` dialog, create a key on the card::
   
   pub  3072R/8A8F1D53  created: 2012-10-06  expires: never       usage: SC  
                        trust: ultimate      validity: ultimate
-  sub  3072R/4E2D6F5A  created: 2012-10-06  expires: 2022-12-30  usage: E   
   sub  3072R/2F15E06B  created: 2012-11-23  expires: 2022-11-21  usage: S   
   sub  3072R/EB8B4EBD  created: 2012-11-24  expires: 2022-11-22  usage: E   
-  sub  3072R/9C9E77B7  created: 2012-11-24  expires: 2022-11-22  usage: A   
+  sub  3072R/6BB325E9  created: 2012-11-24  expires: 2022-11-22  usage: A   
+
   [ultimate] (1). Clint Savage <herlo1@gmail.com>
   [ultimate] (2)  Clint Savage <herlo@fedoraproject.org>
   [ultimate] (3)  Clint Savage <csavage@linuxfoundation.org>
@@ -78,5 +79,16 @@ Upon completion of the key, be sure to save the record to the card and gpg key::
 
   gpg> save
   $
+
+Configuring Authentication with GNOME-Shell
+-------------------------------------------
+To configure authentication using the previously generated GnuPG key, the GNOME-Shell needs some adjustements. With help from several resources, configure the system to allow ``gpg-agent`` to take over ssh authentication.
+
+Certain software must be installed, including ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` and ``pcsc-lite``::
+
+  # yum install gnupg2-smime pcsc-lite
+  .. snip ..
+  Complete!
+
 
 
