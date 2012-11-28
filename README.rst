@@ -127,7 +127,24 @@ Edit the Admin PIN::
 
   Your selection? 3
 
+Enter the Current Admin PIN
+
 .. image:: http://sexysexypenguins.com/misc/gpg-admin.png
+
+Then enter the New Admin PIN twice
+
+.. image:: http://sexysexypenguins.com/misc/gpg-new-admin.png
+
+Edit the PIN::
+
+  1 - change PIN
+  2 - unblock PIN
+  3 - change Admin PIN
+  4 - set the Reset Code
+  Q - quit
+
+  Your selection? 1
+
 
 Generating an SSH Key using GnuPG
 ---------------------------------
