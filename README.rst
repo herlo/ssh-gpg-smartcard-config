@@ -26,6 +26,7 @@ Turn off ssh-agent inside gnome-keyring-daemon::
 
 Configure gpg to use agent (only for smartcard)::
 
+  $ gpg --list-keys | head -n 1
   $ echo "use-agent" >> ~/.gnupg/gpg.conf
 
 Enable ssh-agent drop in replacement support for gpg-agent::
