@@ -36,7 +36,7 @@ Enable ssh-agent drop in replacement support for gpg-agent::
 Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-A rather tricky part of this configuration is to have a simple wrapper script, called *gpg-agent-wrapper*::
+A rather tricky part of this configuration is to have a simple wrapper script, called `gpg-agent-wrapper <http://blog.flameeyes.eu/2010/08/smart-cards-and-secret-agents>`_. This script is used with thanks from Diego E. Pettenò::
 
   $ cat ~/.gnupg/gpg-agent-wrapper
   # Copyright (c) 2010 Diego E. Pettenò <flameeyes@gmail.com>
