@@ -13,7 +13,7 @@ The Gemalto USB Shell Token (v2) can be obtain by following the links below:
 
 `Click Here <Gemalto_USB_Shell_Token.rst>`_ for the instructions on configuring the Gemalto USB Shell Token for ssh authentication.
 
-The `YubiKey Neo
+The YubiKey Neo
 ----------------
 
  * `Yubikey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_
