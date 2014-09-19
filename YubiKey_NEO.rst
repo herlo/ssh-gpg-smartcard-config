@@ -86,8 +86,9 @@ Reload GNOME-Shell So that the gpg-agent stuff above takes effect.
 Reboot the machine works the best.
 
 
-Get gpshell etc to fix serial number
+Get gpshell etc to fix serial number* 
 --------------------------------
+#\* not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO 
 
 Install gpshell binary and libs from tykeal's repo::
 
