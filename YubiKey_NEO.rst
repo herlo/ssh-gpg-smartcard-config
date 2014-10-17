@@ -13,9 +13,15 @@ To configure authentication using the previously generated GnuPG key, the GNOME-
 
 Certain software must be installed, including utilities for the yubikey ``libyubikey-devel``, ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` and ``pcsc-lite``::
 
-  # sudo yum install ykpers-devel libyubikey-devel libusb-devel autoconf gnugpg gnupg2-smime pcsc-lite
-  .. snip ..
-  Complete!
+    sudo yum install ykpers-devel libyubikey-devel \
+    libusb-devel autoconf gnugpg gnupg2-smime pcsc-lite
+  
+Enable your YubiKey NEO’s Smartcard interface (CCID)
+-----------------------------------------------------
+  ykpersonalize -m82
+
+
+If you have a dev key, Reboot your yubikey (remove and reinsert) so that ykneomgr works.
 
 
 Configure GNOME-Shell to use gpg-agent
@@ -86,9 +92,10 @@ Reload GNOME-Shell So that the gpg-agent stuff above takes effect.
 Reboot the machine works the best.
 
 
+
 Get gpshell etc to fix serial number* 
 --------------------------------
-#\* not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO 
+#\* This section not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO 
 
 Install gpshell binary and libs from tykeal's repo::
 
@@ -119,13 +126,6 @@ Get the cap file and place it where gpinstall expects to find it::
   wget -O openpgpcard.cap https://github.com/Yubico/yubico.github.com/raw/master/ykneo-openpgp/releases/ykneo-openpgp-1.0.5.cap
 
 
-Enable your YubiKey NEO’s Smartcard interface (CCID)::
-
-  ykpersonalize -m82
-
-
-Reboot your yubikey (remove and reinsert) so that ykneomgr works.
-
 
 put the correct serial number into gpinstall.txt:: 
 
@@ -139,8 +139,9 @@ Flash the card\*::
   gpshell gpinstall.txt
 
   
-#\* WARNING This erases existing keys on the smartcard don't do this if you already have keys you want to keep on the card. 
+#\* WARNING This erases all existing keys on the smartcard
 
+#\* End section not relevant to a consumer edition NEO
 
 Setting PINs
 ------------
@@ -238,6 +239,8 @@ Once in the ``edit-key`` dialog, create a key on the card::
      (2) Encryption key
      (3) Authentication key
   Your selection? 3
+  
+  IT WILL PROMPT YOU TO ENTER THE ADMIN PIN, AND THEN THE REGULAR PIN. Don't fat finger this part!
 
   gpg: WARNING: such a key has already been stored on the card!
 
