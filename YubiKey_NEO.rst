@@ -18,6 +18,8 @@ Certain software must be installed, including utilities for the yubikey ``libyub
   
 Enable your YubiKey NEO’s Smartcard interface (CCID)
 -----------------------------------------------------
+This will enable the smartcard portion of your yubi key neo::
+
   ykpersonalize -m82
 
 
