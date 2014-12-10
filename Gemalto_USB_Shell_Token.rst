@@ -13,7 +13,7 @@ To configure authentication using the previously generated GnuPG key, the GNOME-
 
 Certain software must be installed, including ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` and ``pcsc-lite``::
 
-  # yum install gnupg2-smime pcsc-lite
+  # yum install gnupg2-smime pcsc-lite pinentry-gtk
   .. snip ..
   Complete!
 
