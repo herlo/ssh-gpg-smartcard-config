@@ -14,9 +14,14 @@ To configure authentication using the previously generated GnuPG key, the GNOME-
 Certain software must be installed, including utilities for the YubiKey ``libyubikey-devel``, ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` and ``pcsc-lite``::
 
   # sudo dnf install ykpers-devel libyubikey-devel libusb-devel autoconf gnupg gnupg2-smime pcsc-lite
-  .. snip ..
-  Complete!
 
+Enable your YubiKey NEO’s Smartcard interface (CCID)
+-----------------------------------------------------
+This will enable the smartcard portion of your yubi key neo::
+
+  ykpersonalize -m82
+
+If you have a dev key, Reboot your yubikey (remove and reinsert) so that ykneomgr works.
 
 Configure GNOME-Shell to use gpg-agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -85,6 +90,55 @@ Reload GNOME-Shell So that the gpg-agent stuff above takes effect.
 
 Rebooting the machine works the best.
 
+
+Get gpshell etc to fix serial number*
+--------------------------------
+#\* This section not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO 
+
+Install gpshell binary and libs from tykeal's repo::
+
+  $ sudo yum install http://copr-be.cloud.fedoraproject.org/results/tykeal/GlobalPlatform/fedora-19-x86_64/tykeal-GlobalPlatform-release-0.0.1-1.fc19/tykeal-GlobalPlatform-release-0.0.1-1.fc19.x86_64.rpm
+
+  sudo yum install gpshell gppcscconnectionplugin
+
+
+Create a gpinstall file::
+
+  cat <<EOF >> gpinstall.txt
+  mode_211
+  enable_trace
+  establish_context
+  card_connect
+  select -AID a000000003000000
+  open_sc -security 1 -keyind 0 -keyver 0 -mac_key 404142434445464748494a4b4c4d4e4f -enc_key 404142434445464748494a4b4c4d4e4f
+  delete -AID D2760001240102000000000000010000
+  delete -AID D27600012401
+  install -file openpgpcard.cap -instParam 00 -priv 00
+  card_disconnect
+  release_context
+  EOF
+
+
+Get the cap file and place it where gpinstall expects to find it::
+
+  wget -O openpgpcard.cap https://github.com/Yubico/yubico.github.com/raw/master/ykneo-openpgp/releases/ykneo-openpgp-1.0.5.cap
+
+
+
+put the correct serial number into gpinstall.txt:: 
+
+  if ykneomgr -s; then
+    sed -i "s/^install.*/& -instAID D276000124010200006"$(printf %08d "$(ykneomgr -s)")"0000/" gpinstall.txt
+  fi
+
+
+Flash the card\*::
+
+  gpshell gpinstall.txt
+
+#\* WARNING This erases all existing keys on the smartcard
+
+#\* End section not relevant to a consumer edition NEO
 
 Setting PINs
 ------------
@@ -181,6 +235,8 @@ Once in the ``edit-key`` dialog, create a key on the card::
      (2) Encryption key
      (3) Authentication key
   Your selection? 3
+  
+  IT WILL PROMPT YOU TO ENTER THE ADMIN PIN, AND THEN THE REGULAR PIN. Don't fat finger this part!
 
   gpg: WARNING: such a key has already been stored on the card!
 
