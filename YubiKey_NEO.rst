@@ -15,7 +15,7 @@ Certain software must be installed, including utilities for the YubiKey ``libyub
 
   # sudo dnf install ykpers-devel libyubikey-devel libusb-devel autoconf gnupg gnupg2-smime pcsc-lite
 
-OR
+OR::
 
   # sudo apt-get install gnupg-agent gnupg2 pinentry-gtk2 scdaemon libccid pcscd libpcsclite1 gpgsm yubikey-personalization libyubikey-dev libykpers-1-dev
 
@@ -53,14 +53,18 @@ Allow admin actions on your YubiKey::
 
 Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-If running gnome, this problem may be solved by running the following to disable gnome-keyring from autostarting its broken gpg-agent and ssh-agent implementation:
+If running gnome, this problem may be solved by running the following to disable gnome-keyring from autostarting its broken gpg-agent and ssh-agent implementation::
+
+::
 
     mv /etc/xdg/autostart/gnome-keyring-gpg.desktop /etc/xdg/autostart/gnome-keyring-gpg.desktop.inactive
+    
     mv /etc/xdg/autostart/gnome-keyring-ssh.desktop /etc/xdg/autostart/gnome-keyring-ssh.desktop.inactive
 
 Then, comment out the `use-ssh-agent` line in /etc/X11/XSession.options file.
 
-Next, place the following in ~/.bashrc to ensure gpg-agent starts with --enable-ssh-support:
+Next, place the following in ~/.bashrc to ensure gpg-agent starts with --enable-ssh-support
+::
 
     if [ ! -f /tmp/gpg-agent.env ]; then
         killall gpg-agent;
