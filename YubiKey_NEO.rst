@@ -5,15 +5,21 @@ This document covers the procedure for configurating a YubiKey as a GPG smartcar
 
 The `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ is used here. Other yubikeys will not work, as they do not support the applet functionality.
 
-Examples below are using a Fedora 22 x86_64 fresh install, there are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
+Examples below are using a Fedora 22 x86_64 and Ubuntu 15.04 x86_64 fresh install. There are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
 
 Configuring Authentication with GNOME-Shell
 -------------------------------------------
 To configure authentication using the previously generated GnuPG key, the GNOME-Shell needs some adjustements. With help from several resources, configure the system to allow ``gpg-agent`` to take over SSH authentication.
 
-Certain software must be installed, including utilities for the YubiKey ``libyubikey-devel``, ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` and ``pcsc-lite``::
+Certain software must be installed, including utilities for the YubiKey ``libyubikey-devel`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` (``gpgsm`` on Ubuntu) and ``pcsc-lite`` (``pcscd`` and ``libpcsclite1`` on Ubuntu)::
 
   # sudo dnf install ykpers-devel libyubikey-devel libusb-devel autoconf gnupg gnupg2-smime pcsc-lite
+
+OR
+
+  # sudo apt-get install gnupg-agent gnupg2 pinentry-gtk2 scdaemon libccid pcscd libpcsclite1 gpgsm yubikey-personalization libyubikey-dev libykpers-1-dev
+
+Optional: Install the `Yubikey NEO Manager GUI. <https://developers.yubico.com/yubikey-neo-manager/>`_. If running Ubuntu, you can install the yubikey neo manager and other yubikey software from the `Yubico PPA <https://launchpad.net/~yubico/+archive/ubuntu/stable>`_.
 
 Enable your YubiKey NEO’s Smartcard interface (CCID)
 -----------------------------------------------------
@@ -47,6 +53,24 @@ Allow admin actions on your YubiKey::
 
 Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+If running gnome, this problem may be solved by running the following to disable gnome-keyring from autostarting its broken gpg-agent and ssh-agent implementation:
+
+    mv /etc/xdg/autostart/gnome-keyring-gpg.desktop /etc/xdg/autostart/gnome-keyring-gpg.desktop.inactive
+    mv /etc/xdg/autostart/gnome-keyring-ssh.desktop /etc/xdg/autostart/gnome-keyring-ssh.desktop.inactive
+
+Then, comment out the `use-ssh-agent` line in /etc/X11/XSession.options file.
+
+Next, place the following in ~/.bashrc to ensure gpg-agent starts with --enable-ssh-support:
+
+    if [ ! -f /tmp/gpg-agent.env ]; then
+        killall gpg-agent;
+        eval $(gpg-agent --daemon --enable-ssh-support > /tmp/gpg-agent.env);
+    fi
+    . /tmp/gpg-agent.env
+
+Now go to next step (Reload GNOME-Shell) :)
+
+Otherwise, there is another option:
 
 A rather tricky part of this configuration is to have a simple wrapper script, called `gpg-agent-wrapper <http://blog.flameeyes.eu/2010/08/smart-cards-and-secret-agents>`_. This script is used with thanks from Diego E. Pettenò::
 
@@ -93,7 +117,7 @@ Rebooting the machine works the best.
 
 Get gpshell etc to fix serial number*
 --------------------------------
-#\* This section not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO 
+#\* This section not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO. It also only contains instructions for Fedora.
 
 Install gpshell binary and libs from tykeal's repo::
 
@@ -296,3 +320,5 @@ A special thanks to the following people and/or links.
   * `How to use GPG with SSH (with smartcard section) <http://www.programmierecke.net/howto/gpg-ssh.html>`_
   * `The GnuPG Smartcard HOWTO (Advanced Features) <http://www.gnupg.org/howtos/card-howto/en/smartcard-howto-single.html#id2507402>`_
   * `Smart Cards and Secret Agents <http://blog.flameeyes.eu/2010/08/smart-cards-and-secret-agents>`_
+  * `How to mitigate issues between gnupg and gnome keyring manager <http://wiki.gnupg.org/GnomeKeyring>`_
+  * `Useful info on how to start the correct agent at login <http://www.bootc.net/archives/2013/06/09/my-perfect-gnupg-ssh-agent-setup/>`_
