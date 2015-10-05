@@ -11,11 +11,13 @@ Configuring Authentication with GNOME-Shell
 -------------------------------------------
 To configure authentication using the previously generated GnuPG key, the GNOME-Shell needs some adjustements. With help from several resources, configure the system to allow ``gpg-agent`` to take over SSH authentication.
 
-Certain software must be installed, including utilities for the YubiKey ``libyubikey-devel`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` (``gpgsm`` on Ubuntu) and ``pcsc-lite`` (``pcscd`` and ``libpcsclite1`` on Ubuntu)::
+Certain software must be installed, including utilities for the YubiKey ``libyubikey-devel`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` (``gpgsm`` on Ubuntu) and ``pcsc-lite`` (``pcscd`` and ``libpcsclite1`` on Ubuntu)
+
+*Fedora*::
 
   $ sudo dnf install ykpers-devel libyubikey-devel libusb-devel autoconf gnupg gnupg2-smime pcsc-lite
 
-OR::
+*Ubuntu*::
 
   $ sudo apt-get install gnupg-agent gnupg2 pinentry-gtk2 scdaemon libccid pcscd libpcsclite1 gpgsm \
                          yubikey-personalization libyubikey-dev libykpers-1-dev
@@ -120,7 +122,7 @@ Rebooting the machine works the best.
 
 Get gpshell etc to fix serial number*
 --------------------------------
-#\* This section not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO. It also only contains instructions for Fedora.
+#\* This section not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO. This section has not been tested with Ubuntu.
 
 Install gpshell binary and libs from tykeal's repo::
 
