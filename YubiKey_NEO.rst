@@ -13,19 +13,20 @@ To configure authentication using the previously generated GnuPG key, the GNOME-
 
 Certain software must be installed, including utilities for the YubiKey ``libyubikey-devel`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` (``gpgsm`` on Ubuntu) and ``pcsc-lite`` (``pcscd`` and ``libpcsclite1`` on Ubuntu)::
 
-  # sudo dnf install ykpers-devel libyubikey-devel libusb-devel autoconf gnupg gnupg2-smime pcsc-lite
+  $ sudo dnf install ykpers-devel libyubikey-devel libusb-devel autoconf gnupg gnupg2-smime pcsc-lite
 
 OR::
 
-  # sudo apt-get install gnupg-agent gnupg2 pinentry-gtk2 scdaemon libccid pcscd libpcsclite1 gpgsm yubikey-personalization libyubikey-dev libykpers-1-dev
+  $ sudo apt-get install gnupg-agent gnupg2 pinentry-gtk2 scdaemon libccid pcscd libpcsclite1 gpgsm \
+                         yubikey-personalization libyubikey-dev libykpers-1-dev
 
-Optional: Install the `Yubikey NEO Manager GUI. <https://developers.yubico.com/yubikey-neo-manager/>`_. If running Ubuntu, you can install the yubikey neo manager and other yubikey software from the `Yubico PPA <https://launchpad.net/~yubico/+archive/ubuntu/stable>`_.
+**Optional**: Install the `Yubikey NEO Manager GUI <https://developers.yubico.com/yubikey-neo-manager/>`_. If running Ubuntu, you can install the yubikey neo manager and other yubikey software from the `Yubico PPA <https://launchpad.net/~yubico/+archive/ubuntu/stable>`_.
 
 Enable your YubiKey NEO’s Smartcard interface (CCID)
 -----------------------------------------------------
 This will enable the smartcard portion of your yubi key neo::
 
-  ykpersonalize -m82
+  $ ykpersonalize -m82
 
 If you have a dev key, Reboot your yubikey (remove and reinsert) so that ykneomgr works.
 
@@ -55,15 +56,13 @@ Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 If running gnome, this problem may be solved by running the following to disable gnome-keyring from autostarting its broken gpg-agent and ssh-agent implementation::
 
-::
-
-    mv /etc/xdg/autostart/gnome-keyring-gpg.desktop /etc/xdg/autostart/gnome-keyring-gpg.desktop.inactive
+  mv /etc/xdg/autostart/gnome-keyring-gpg.desktop /etc/xdg/autostart/gnome-keyring-gpg.desktop.inactive
     
-    mv /etc/xdg/autostart/gnome-keyring-ssh.desktop /etc/xdg/autostart/gnome-keyring-ssh.desktop.inactive
+  mv /etc/xdg/autostart/gnome-keyring-ssh.desktop /etc/xdg/autostart/gnome-keyring-ssh.desktop.inactive
 
-Then, comment out the `use-ssh-agent` line in /etc/X11/XSession.options file.
+Then, comment out the ``use-ssh-agent`` line in ``/etc/X11/XSession.options`` file.
 
-Next, place the following in ~/.bashrc to ensure gpg-agent starts with --enable-ssh-support
+Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--enable-ssh-support``
 ::
 
     if [ ! -f /tmp/gpg-agent.env ]; then
