@@ -11,9 +11,9 @@ Configuring Authentication with GNOME-Shell
 -------------------------------------------
 To configure authentication using the previously generated GnuPG key, the GNOME-Shell needs some adjustements. With help from several resources, configure the system to allow ``gpg-agent`` to take over ssh authentication.
 
-Certain software must be installed, including ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` and ``pcsc-lite``::
+Certain software must be installed, including ``gnupg2`` (which is probably already installed), ``gnupg2-smime``, ``pcsc-lite``, and ``pcsc-lite-ccid``::
 
-  # yum install gnupg2-smime pcsc-lite pinentry-gtk
+  # yum install gnupg2-smime pcsc-lite pcsc-lite-ccid
   .. snip ..
   Complete!
 
