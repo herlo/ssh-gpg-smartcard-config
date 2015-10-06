@@ -32,7 +32,7 @@ This will enable the smartcard portion of your yubi key neo::
 
 If you have a dev key, Reboot your yubikey (remove and reinsert) so that ykneomgr works.
 
-Configure GNOME-Shell to use gpg-agent
+Configure GNOME-Shell to use gpg-agent and disable ssh-agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Turn off ssh-agent inside gnome-keyring-daemon::
@@ -49,20 +49,47 @@ Enable ssh-agent drop in replacement support for gpg-agent::
 
   $ echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
 
-Allow admin actions on your YubiKey::
+Allow admin actions on your YubiKey (if your gnupg version is < 2.0.11)::
 
-  $ echo "allow-admin" >>  ~/.gnupg/scdaemon.conf 
+  $ echo "allow-admin" >>  ~/.gnupg/scdaemon.conf
+
+Then, comment out the ``use-ssh-agent`` line in ``/etc/X11/XSession.options`` file.
 
 
-Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication
+Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Ubuntu)
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Open Startup Applications
+.. image:: startup_applications.png
+
+Uncheck "GPG Password Agent" and "SSH Key Agent"
+.. image:: startup_apps_checked.png
+.. image:: startup_apps_unchecked.png
+
+Edit ``/usr/share/upstart/sessions/gpg-agent.conf`` so that the pre-start script contains the following::
+
+  eval "$(gpg-agent --daemon --enable-ssh-support --sh)" >/dev/null
+  initctl set-env --global GPG_AGENT_INFO=$GPG_AGENT_INFO
+  initctl set-env --global SSH_AUTH_SOCK=$SSH_AUTH_SOCK
+  initctl set-env --global SSH_AGENT_PID=$SSH_AGENT_PID
+
+Add the following lines to the post-stop script section::
+
+  initctl unset-env --global SSH_AUTH_SOCK
+  initctl unset-env --global SSH_AGENT_PID
+
+Disable the other system gpg-agent::
+
+  mv /etc/X11/Xsession.d/90gpg-agent ~/bak/90gpg-agent
+
+Note: We could have used the Xsession gpg-agent and trashed the upstart one, but there is an `open bug report <https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=642021>`_ for 90gpg-agent. Also, the upstart script has the capability of exporting the environment variables globally with initctl set-env --global.
+
+Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Fedora)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 If running gnome, this problem may be solved by running the following to disable gnome-keyring from autostarting its broken gpg-agent and ssh-agent implementation::
 
   mv /etc/xdg/autostart/gnome-keyring-gpg.desktop /etc/xdg/autostart/gnome-keyring-gpg.desktop.inactive
     
   mv /etc/xdg/autostart/gnome-keyring-ssh.desktop /etc/xdg/autostart/gnome-keyring-ssh.desktop.inactive
-
-Then, comment out the ``use-ssh-agent`` line in ``/etc/X11/XSession.options`` file.
 
 Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--enable-ssh-support``
 ::
