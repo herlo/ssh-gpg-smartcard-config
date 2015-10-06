@@ -5,27 +5,36 @@ This document covers the procedure for configurating a YubiKey as a GPG smartcar
 
 The `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ is used here. Other yubikeys will not work, as they do not support the applet functionality.
 
-Examples below are using a Fedora 22 x86_64 fresh install, there are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
+Examples below are using a Fedora 22 x86_64 and Ubuntu 15.04 x86_64 fresh install. There are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
 
 Configuring Authentication with GNOME-Shell
 -------------------------------------------
 To configure authentication using the previously generated GnuPG key, the GNOME-Shell needs some adjustements. With help from several resources, configure the system to allow ``gpg-agent`` to take over SSH authentication.
 
-Certain software must be installed, including utilities for the yubikey ``libyubikey-devel``, ``gnupg2`` (which is probably already installed), ``gnupg2-smime``, ``pcsc-lite``, and ``pcsc-lite-ccid``::
+Certain software must be installed, including utilities for the YubiKey ``libyubikey-devel`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` (``gpgsm`` on Ubuntu)i, ``pcsc-lite-ccid``, and ``pcsc-lite`` (``pcscd`` and ``libpcsclite1`` on Ubuntu).
 
-  # sudo yum install ykpers-devel libyubikey-devel libusb-devel autoconf gnugpg gnupg2-smime pcsc-lite pcsc-lite-ccid
-  .. snip ..
-  Complete!
+*Fedora*::
+
+  $ sudo dnf install ykpers-devel libyubikey-devel libusb-devel \
+     autoconf gnupg gnupg2-smime pcsc-lite pcsc-lite-ccid
+
+*Ubuntu*::
+
+  $ sudo apt-get install gnupg-agent gnupg2 pinentry-gtk2 scdaemon \
+     libccid pcscd libpcsclite1 gpgsm yubikey-personalization \
+     libyubikey-dev libykpers-1-dev
+
+**Optional**: Install the `Yubikey NEO Manager GUI <https://developers.yubico.com/yubikey-neo-manager/>`_. If running Ubuntu, you can install the yubikey neo manager and other yubikey software from the `Yubico PPA <https://launchpad.net/~yubico/+archive/ubuntu/stable>`_.
 
 Enable your YubiKey NEO’s Smartcard interface (CCID)
 -----------------------------------------------------
 This will enable the smartcard portion of your yubi key neo::
 
-  ykpersonalize -m82
+  $ ykpersonalize -m82
 
 If you have a dev key, Reboot your yubikey (remove and reinsert) so that ykneomgr works.
 
-Configure GNOME-Shell to use gpg-agent
+Configure GNOME-Shell to use gpg-agent and disable ssh-agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Turn off ssh-agent inside gnome-keyring-daemon::
@@ -42,13 +51,59 @@ Enable ssh-agent drop in replacement support for gpg-agent::
 
   $ echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
 
-Allow admin actions on your YubiKey::
+Allow admin actions on your YubiKey (if your gnupg version is < 2.0.11)::
 
-  $ echo "allow-admin" >>  ~/.gnupg/scdaemon.conf 
+  $ echo "allow-admin" >>  ~/.gnupg/scdaemon.conf
+
+Then, comment out the ``use-ssh-agent`` line in ``/etc/X11/XSession.options`` file.
 
 
-Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication
+Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Ubuntu)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Open Startup Applications
+
+Uncheck "GPG Password Agent" and "SSH Key Agent"
+
+.. image:: startup_apps_checked.png
+
+Edit ``/usr/share/upstart/sessions/gpg-agent.conf`` so that the pre-start script contains the following::
+
+  eval "$(gpg-agent --daemon --enable-ssh-support --sh)" >/dev/null
+  initctl set-env --global GPG_AGENT_INFO=$GPG_AGENT_INFO
+  initctl set-env --global SSH_AUTH_SOCK=$SSH_AUTH_SOCK
+  initctl set-env --global SSH_AGENT_PID=$SSH_AGENT_PID
+
+Add the following lines to the post-stop script section::
+
+  initctl unset-env --global SSH_AUTH_SOCK
+  initctl unset-env --global SSH_AGENT_PID
+
+Disable the other system gpg-agent::
+
+  mv /etc/X11/Xsession.d/90gpg-agent ~/bak/90gpg-agent
+
+Note: We could have used the Xsession gpg-agent and trashed the upstart one, but there is an `open bug report <https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=642021>`_ for 90gpg-agent. Also, the upstart script has the capability of exporting the environment variables globally with initctl set-env --global.
+
+Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Fedora)
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+If running gnome, this problem may be solved by running the following to disable gnome-keyring from autostarting its broken gpg-agent and ssh-agent implementation::
+
+  mv /etc/xdg/autostart/gnome-keyring-gpg.desktop /etc/xdg/autostart/gnome-keyring-gpg.desktop.inactive
+    
+  mv /etc/xdg/autostart/gnome-keyring-ssh.desktop /etc/xdg/autostart/gnome-keyring-ssh.desktop.inactive
+
+Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--enable-ssh-support``
+::
+
+    if [ ! -f /tmp/gpg-agent.env ]; then
+        killall gpg-agent;
+        eval $(gpg-agent --daemon --enable-ssh-support > /tmp/gpg-agent.env);
+    fi
+    . /tmp/gpg-agent.env
+
+Now go to next step (Reload GNOME-Shell) :)
+
+Otherwise, there is another option:
 
 A rather tricky part of this configuration is to have a simple wrapper script, called `gpg-agent-wrapper <http://blog.flameeyes.eu/2010/08/smart-cards-and-secret-agents>`_. This script is used with thanks from Diego E. Pettenò::
 
@@ -95,7 +150,7 @@ Rebooting the machine works the best.
 
 Get gpshell etc to fix serial number*
 --------------------------------
-#\* This section not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO 
+#\* This section not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO. This section has not been tested with Ubuntu.
 
 Install gpshell binary and libs from tykeal's repo::
 
@@ -298,3 +353,5 @@ A special thanks to the following people and/or links.
   * `How to use GPG with SSH (with smartcard section) <http://www.programmierecke.net/howto/gpg-ssh.html>`_
   * `The GnuPG Smartcard HOWTO (Advanced Features) <http://www.gnupg.org/howtos/card-howto/en/smartcard-howto-single.html#id2507402>`_
   * `Smart Cards and Secret Agents <http://blog.flameeyes.eu/2010/08/smart-cards-and-secret-agents>`_
+  * `How to mitigate issues between gnupg and gnome keyring manager <http://wiki.gnupg.org/GnomeKeyring>`_
+  * `Useful info on how to start the correct agent at login <http://www.bootc.net/archives/2013/06/09/my-perfect-gnupg-ssh-agent-setup/>`_
