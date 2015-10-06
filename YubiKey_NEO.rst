@@ -59,11 +59,10 @@ Then, comment out the ``use-ssh-agent`` line in ``/etc/X11/XSession.options`` fi
 Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Ubuntu)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Open Startup Applications
-.. image:: startup_applications.png
 
 Uncheck "GPG Password Agent" and "SSH Key Agent"
+
 .. image:: startup_apps_checked.png
-.. image:: startup_apps_unchecked.png
 
 Edit ``/usr/share/upstart/sessions/gpg-agent.conf`` so that the pre-start script contains the following::
 
