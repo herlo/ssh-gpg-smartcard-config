@@ -7,6 +7,7 @@ The Gemalto USB Shell Token
 ----------------------------
 
 To obtain the the Gemalto USB Shell Token (v2) visit `http://shop.kernelconcepts.de/ <http://shop.kernelconcepts.de/>`_
+
 Items needed:
 
  * Gemalto USB Shell Token (v2) 
