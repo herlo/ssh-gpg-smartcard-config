@@ -6,10 +6,11 @@ Configuring a gpg smart card for ssh authentication on Linux is non-trivial.
 The Gemalto USB Shell Token
 ----------------------------
 
-The Gemalto USB Shell Token (v2) can be obtain by following the links below:
+To obtain the the Gemalto USB Shell Token (v2) visit `http://shop.kernelconcepts.de/ <http://shop.kernelconcepts.de/>`_
+Items needed:
 
- * `Gemalto USB Shell Token (v2) <http://shop.kernelconcepts.de/product_info.php?cPath=1_26&products_id=119>`_
- * `OpenPGP SmartCard V2 <http://shop.kernelconcepts.de/product_info.php?products_id=42&osCsid=101f6f90ee89ad616d2eca1b31dff757>`_
+ * Gemalto USB Shell Token (v2) 
+ * OpenPGP SmartCard V2
 
 `Click Here <Gemalto_USB_Shell_Token.rst>`_ for the instructions on configuring the Gemalto USB Shell Token for ssh authentication.
 
