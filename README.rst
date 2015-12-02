@@ -15,9 +15,10 @@ Items needed:
 
 `Click Here <Gemalto_USB_Shell_Token.rst>`_ for the instructions on configuring the Gemalto USB Shell Token for ssh authentication.
 
-The YubiKey Neo
+The YubiKey 4 and YubiKey NEO
 ----------------
 
- * `Yubikey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_
+ * `YubiKey 4/YubiKey 4 Nano <https://www.yubico.com/products/yubikey-hardware/yubikey4>` _
+ * `YubiKey NEO <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_
 
-`Click Here <YubiKey_NEO.rst>`_ for the instructions on configuring the Yubikey NEO for ssh authentication.
+`Click Here <YubiKey_NEO.rst>`_ for the instructions on configuring the YubiKey 4 or YubiKey NEO for ssh authentication.
