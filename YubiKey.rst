@@ -24,11 +24,12 @@ Certain software must be installed, including utilities for the YubiKey ``libyub
      libccid pcscd libpcsclite1 gpgsm yubikey-personalization \
      libyubikey-dev libykpers-1-dev
 
-**Optional**: Install the `Yubikey NEO Manager GUI <https://developers.yubico.com/yubikey-neo-manager/>`_. If running Ubuntu, you can install the YubiKey NEO manager and other YubiKey software from the `Yubico PPA <https://launchpad.net/~yubico/+archive/ubuntu/stable>`_.
+**Optional**: Install the `YubiKey NEO Manager GUI <https://developers.yubico.com/yubikey-neo-manager/>`_. If running Ubuntu, you can install the YubiKey NEO manager and other YubiKey software from the `Yubico PPA <https://launchpad.net/~yubico/+archive/ubuntu/stable>`_.
 
-Enable your YubiKey NEO’s Smartcard interface (CCID)
+Enable your YubiKey’s Smartcard interface (CCID)
 -----------------------------------------------------
-This will enable the smartcard portion of your yubi key neo::
+This will enable the smartcard portion of your YubiKey::
+This is not required for YubiKey 4.
 
   $ ykpersonalize -m82
 
