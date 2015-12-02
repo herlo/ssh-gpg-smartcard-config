@@ -18,7 +18,7 @@ Items needed:
 The YubiKey 4 and YubiKey NEO
 ----------------
 
- * `YubiKey 4/YubiKey 4 Nano <https://www.yubico.com/products/yubikey-hardware/yubikey4>` _
+ * `YubiKey 4/YubiKey 4 Nano <https://www.yubico.com/products/yubikey-hardware/yubikey4>`_
  * `YubiKey NEO <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_
 
 `Click Here <YubiKey.rst>`_ for the instructions on configuring the YubiKey 4 or YubiKey NEO for ssh authentication.
