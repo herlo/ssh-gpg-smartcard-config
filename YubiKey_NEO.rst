@@ -1,9 +1,9 @@
-ssh-gpg-smartcard-config for yubikey-neo
+ssh-gpg-smartcard-config for YubiKey 4 and YubiKey NEO
 ========================================
 
 This document covers the procedure for configurating a YubiKey as a GPG smartcard for SSH authentication, it also covers setting the correct serial number on the card. The benefit is a good model for `two-factor authentication <http://en.wikipedia.org/wiki/Two-factor_authentication>`_, something you have and something you know. In this example, there is a token and a passphrase.
 
-The `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ is used here. Other yubikeys will not work, as they do not support the applet functionality.
+The `YubiKey 4 or YubiKey 4 Nano <https://www.yubico.com/products/yubikey-hardware/yubikey4>` or `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ are used here. Other YubiKeys will not work, as they do not support the applet functionality.
 
 Examples below are using a Fedora 22 x86_64 and Ubuntu 15.04 x86_64 fresh install. There are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
 
@@ -24,7 +24,7 @@ Certain software must be installed, including utilities for the YubiKey ``libyub
      libccid pcscd libpcsclite1 gpgsm yubikey-personalization \
      libyubikey-dev libykpers-1-dev
 
-**Optional**: Install the `Yubikey NEO Manager GUI <https://developers.yubico.com/yubikey-neo-manager/>`_. If running Ubuntu, you can install the yubikey neo manager and other yubikey software from the `Yubico PPA <https://launchpad.net/~yubico/+archive/ubuntu/stable>`_.
+**Optional**: Install the `Yubikey NEO Manager GUI <https://developers.yubico.com/yubikey-neo-manager/>`_. If running Ubuntu, you can install the YubiKey NEO manager and other YubiKey software from the `Yubico PPA <https://launchpad.net/~yubico/+archive/ubuntu/stable>`_.
 
 Enable your YubiKey NEO’s Smartcard interface (CCID)
 -----------------------------------------------------
@@ -32,7 +32,7 @@ This will enable the smartcard portion of your yubi key neo::
 
   $ ykpersonalize -m82
 
-If you have a dev key, Reboot your yubikey (remove and reinsert) so that ykneomgr works.
+If you have a dev key, Reboot your YubiKey (remove and reinsert) so that ykneomgr works.
 
 Configure GNOME-Shell to use gpg-agent and disable ssh-agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
