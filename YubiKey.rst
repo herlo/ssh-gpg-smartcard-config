@@ -101,45 +101,6 @@ Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--e
 
 Now go to next step (Reload GNOME-Shell) :)
 
-Otherwise, there is another option:
-
-A rather tricky part of this configuration is to have a simple wrapper script, called `gpg-agent-wrapper <http://blog.flameeyes.eu/2010/08/smart-cards-and-secret-agents>`_. This script is used with thanks from Diego E. Pettenò::
-
-  wget -O ~/.gnupg/gpg-agent-wrapper https://github.com/herlo/ssh-gpg-smartcard-config/raw/master/gpg-agent-wrapper && chmod +x ~/.gnupg/gpg-agent-wrapper 
-
-**NOTE:** The above code has been altered to allow the ``.gpg-agent-info`` to run after SSH_AUTH_SOCK. Please see the CREDITS section below for details.
-
-The above **gpg-agent-wrapper** script is invoked using X and bash (or favorite shell). Please create the following files as below.
-
-The X session::
-
-  $ cat /etc/X11/xinit/xinitrc.d/01-xsession
-  [ -f ${HOME}/.xsession ] && source ${HOME}/.xsession
-
-  $ ls -l /etc/X11/xinit/xinitrc.d/01-xsession
-  -rwxr-xr-x. 1 root root 53 Nov 23 10:54 /etc/X11/xinit/xinitrc.d/01-xsession
-
-  $ cat ~/.xsession
-  source ${HOME}/.gnupg/gpg-agent-wrapper
-
-The shell rc file::
-
-  $ cat ~/.bashrc
-  # .bashrc
-
-  # Source global definitions
-  if [ -f /etc/bashrc ]; then
-    . /etc/bashrc
-  fi
-
-  ..snip..
-
-  # ssh authentication component
-  source ${HOME}/.gnupg/gpg-agent-wrapper
-
-  ..snip..
-
-
 Reload GNOME-Shell So that the gpg-agent stuff above takes effect. 
 ------------------
 
