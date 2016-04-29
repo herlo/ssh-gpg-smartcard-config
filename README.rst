@@ -21,3 +21,8 @@ The YubiKey Neo
  * `Yubikey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_
 
 `Click Here <YubiKey_NEO.rst>`_ for the instructions on configuring the Yubikey NEO for ssh authentication.
+
+.. |ImageLink| image:: http://i.creativecommons.org/l/by/4.0/88x31.png
+.. _ImageLink: http://creativecommons.org/licenses/by/4.0/
+
+This work is licensed under a `Creative Commons Attribution 4.0 International License <http://creativecommons.org/licenses/by/4.0/>`_.
