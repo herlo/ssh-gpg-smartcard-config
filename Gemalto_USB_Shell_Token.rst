@@ -33,71 +33,50 @@ Enable ssh-agent drop in replacement support for gpg-agent::
 
   $ echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
 
-Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication
+Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Ubuntu)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Open Startup Applications
 
-A rather tricky part of this configuration is to have a simple wrapper script, called `gpg-agent-wrapper <http://blog.flameeyes.eu/2010/08/smart-cards-and-secret-agents>`_. This script is used with thanks from Diego E. Pettenò::
+Uncheck "GPG Password Agent" and "SSH Key Agent"
 
-  $ cat ~/.gnupg/gpg-agent-wrapper
-  # Copyright (c) 2010 Diego E. Pettenò <flameeyes@gmail.com>
-  # Available under CC-BY license (Attribution)
+.. image:: startup_apps_checked.png
 
-  if ! [ -f "${HOME}/.gpg-agent-info" ] || ! pgrep -u ${USER} gpg-agent >/dev/null; then
-    gpg-agent --daemon --enable-ssh-support --scdaemon-program /usr/libexec/scdaemon --use-standard-socket --log-file ~/.gnupg/gpg-agent.log --write-env-file
-  fi
+Edit ``/usr/share/upstart/sessions/gpg-agent.conf`` so that the pre-start script contains the following::
 
-  # for ssh-agent forwarding, override gnome-keyring though!
-  if [ -n ${SSH_AUTH_SOCK} ] && \
-      [ ${SSH_AUTH_SOCK#/tmp/keyring-} = ${SSH_AUTH_SOCK} ]; then
+  eval "$(gpg-agent --daemon --enable-ssh-support --sh)" >/dev/null
+  initctl set-env --global GPG_AGENT_INFO=$GPG_AGENT_INFO
+  initctl set-env --global SSH_AUTH_SOCK=$SSH_AUTH_SOCK
+  initctl set-env --global SSH_AGENT_PID=$SSH_AGENT_PID
 
-      fwd_SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
-  fi
+Add the following lines to the post-stop script section::
 
-  export SSH_AUTH_SOCK
+  initctl unset-env --global SSH_AUTH_SOCK
+  initctl unset-env --global SSH_AGENT_PID
 
-  if [ "${fwd_SSH_AUTH_SOCK}" != "" ]; then
-      SSH_AUTH_SOCK=${fwd_SSH_AUTH_SOCK}
-      export SSH_AUTH_SOCK
-  fi
+Disable the other system gpg-agent::
 
-  source ${HOME}/.gpg-agent-info
-  export GPG_AGENT_INFO
-  export SSH_AGENT_PID
+  mv /etc/X11/Xsession.d/90gpg-agent ~/bak/90gpg-agent
 
-  GPG_TTY=$(tty)
-  export GPG_TTY
+Note: We could have used the Xsession gpg-agent and trashed the upstart one, but there is an `open bug report <https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=642021>`_ for 90gpg-agent. Also, the upstart script has the capability of exporting the environment variables globally with initctl set-env --global.
 
-**NOTE:** The above code has been altered to allow the ``.gpg-agent-info`` to run after SSH_AUTH_SOCK. Please see the CREDITS section below for details.
+Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Fedora)
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+If running gnome, this problem may be solved by running the following to disable gnome-keyring from autostarting its broken gpg-agent and ssh-agent implementation::
 
-The above **gpg-agent-wrapper** script is invoked using X and bash (or favorite shell). Please ensure the following files exist as below.
+  mv /etc/xdg/autostart/gnome-keyring-gpg.desktop /etc/xdg/autostart/gnome-keyring-gpg.desktop.inactive
 
-The X session::
+  mv /etc/xdg/autostart/gnome-keyring-ssh.desktop /etc/xdg/autostart/gnome-keyring-ssh.desktop.inactive
 
-  $ cat /etc/X11/xinit/xinitrc.d/01-xsession
-  [ -f ${HOME}/.xsession ] && source ${HOME}/.xsession
+Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--enable-ssh-support``
+::
 
-  $ ls -l /etc/X11/xinit/xinitrc.d/01-xsession
-  -rwxr-xr-x. 1 root root 53 Nov 23 10:54 /etc/X11/xinit/xinitrc.d/01-xsession
+    if [ ! -f /tmp/gpg-agent.env ]; then
+        killall gpg-agent;
+        eval $(gpg-agent --daemon --enable-ssh-support > /tmp/gpg-agent.env);
+    fi
+    . /tmp/gpg-agent.env
 
-  $ cat ~/.xsession
-  source ${HOME}/.gnupg/gpg-agent-wrapper
-
-The shell rc file::
-
-  $ cat ~/.bashrc
-  # .bashrc
-
-  # Source global definitions
-  if [ -f /etc/bashrc ]; then
-    . /etc/bashrc
-  fi
-
-  ..snip..
-
-  # ssh authentication component
-  source ${HOME}/.gnupg/gpg-agent-wrapper
-
-  ..snip..
+Now go to next step (Reload GNOME-Shell) :)
 
 Reload GNOME-Shell
 ------------------
