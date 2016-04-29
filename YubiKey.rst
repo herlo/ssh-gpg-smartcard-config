@@ -1,9 +1,9 @@
-ssh-gpg-smartcard-config for yubikey-neo
+ssh-gpg-smartcard-config for YubiKey 4 and YubiKey NEO
 ========================================
 
 This document covers the procedure for configurating a YubiKey as a GPG smartcard for SSH authentication, it also covers setting the correct serial number on the card. The benefit is a good model for `two-factor authentication <http://en.wikipedia.org/wiki/Two-factor_authentication>`_, something you have and something you know. In this example, there is a token and a passphrase.
 
-The `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ is used here. Other yubikeys will not work, as they do not support the applet functionality.
+The `YubiKey 4 or YubiKey 4 Nano <https://www.yubico.com/products/yubikey-hardware/yubikey4>` or `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ are used here. Other YubiKeys will not work, as they do not support the applet functionality.
 
 Examples below are using a Fedora 22 x86_64 and Ubuntu 15.04 x86_64 fresh install. There are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
 
@@ -24,15 +24,16 @@ Certain software must be installed, including utilities for the YubiKey ``libyub
      libccid pcscd libpcsclite1 gpgsm yubikey-personalization \
      libyubikey-dev libykpers-1-dev
 
-**Optional**: Install the `Yubikey NEO Manager GUI <https://developers.yubico.com/yubikey-neo-manager/>`_. If running Ubuntu, you can install the yubikey neo manager and other yubikey software from the `Yubico PPA <https://launchpad.net/~yubico/+archive/ubuntu/stable>`_.
+**Optional**: Install the `YubiKey NEO Manager GUI <https://developers.yubico.com/yubikey-neo-manager/>`_. If running Ubuntu, you can install the YubiKey NEO manager and other YubiKey software from the `Yubico PPA <https://launchpad.net/~yubico/+archive/ubuntu/stable>`_.
 
-Enable your YubiKey NEO’s Smartcard interface (CCID)
+Enable your YubiKey’s Smartcard interface (CCID)
 -----------------------------------------------------
-This will enable the smartcard portion of your yubi key neo::
+This will enable the smartcard portion of your YubiKey::
+This is not required for YubiKey 4.
 
   $ ykpersonalize -m82
 
-If you have a dev key, Reboot your yubikey (remove and reinsert) so that ykneomgr works.
+If you have a dev key, Reboot your YubiKey (remove and reinsert) so that ykneomgr works.
 
 Configure GNOME-Shell to use gpg-agent and disable ssh-agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,9 +55,6 @@ Enable ssh-agent drop in replacement support for gpg-agent::
 Allow admin actions on your YubiKey (if your gnupg version is < 2.0.11)::
 
   $ echo "allow-admin" >>  ~/.gnupg/scdaemon.conf
-
-Then, comment out the ``use-ssh-agent`` line in ``/etc/X11/XSession.options`` file.
-
 
 Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Ubuntu)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -102,45 +100,6 @@ Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--e
     . /tmp/gpg-agent.env
 
 Now go to next step (Reload GNOME-Shell) :)
-
-Otherwise, there is another option:
-
-A rather tricky part of this configuration is to have a simple wrapper script, called `gpg-agent-wrapper <http://blog.flameeyes.eu/2010/08/smart-cards-and-secret-agents>`_. This script is used with thanks from Diego E. Pettenò::
-
-  wget -O ~/.gnupg/gpg-agent-wrapper https://github.com/herlo/ssh-gpg-smartcard-config/raw/master/gpg-agent-wrapper && chmod +x ~/.gnupg/gpg-agent-wrapper 
-
-**NOTE:** The above code has been altered to allow the ``.gpg-agent-info`` to run after SSH_AUTH_SOCK. Please see the CREDITS section below for details.
-
-The above **gpg-agent-wrapper** script is invoked using X and bash (or favorite shell). Please create the following files as below.
-
-The X session::
-
-  $ cat /etc/X11/xinit/xinitrc.d/01-xsession
-  [ -f ${HOME}/.xsession ] && source ${HOME}/.xsession
-
-  $ ls -l /etc/X11/xinit/xinitrc.d/01-xsession
-  -rwxr-xr-x. 1 root root 53 Nov 23 10:54 /etc/X11/xinit/xinitrc.d/01-xsession
-
-  $ cat ~/.xsession
-  source ${HOME}/.gnupg/gpg-agent-wrapper
-
-The shell rc file::
-
-  $ cat ~/.bashrc
-  # .bashrc
-
-  # Source global definitions
-  if [ -f /etc/bashrc ]; then
-    . /etc/bashrc
-  fi
-
-  ..snip..
-
-  # ssh authentication component
-  source ${HOME}/.gnupg/gpg-agent-wrapper
-
-  ..snip..
-
 
 Reload GNOME-Shell So that the gpg-agent stuff above takes effect. 
 ------------------
