@@ -159,7 +159,7 @@ Flash the card\*::
 Setting PINs
 ------------
 
-Included with the gemalto token and GnuPG Smartcard version 2 should be a document describing the default PIN values. There is a regular PIN, which is used to unlock the token for Signing, Encryption or Authentication. Additionally, there is an admin PIN, which is used to reset the PIN and/or the Reset Code for the key itself.
+There is a regular PIN, which is used to unlock the token for Signing, Encryption or Authentication. Additionally, there is an admin PIN, which is used to reset the PIN and/or the Reset Code for the key itself.
 
 
 Complete these steps for PIN and then Admin Pin
