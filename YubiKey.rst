@@ -3,7 +3,7 @@ ssh-gpg-smartcard-config for YubiKey 4 and YubiKey NEO
 
 This document covers the procedure for configurating a YubiKey as a GPG smartcard for SSH authentication, it also covers setting the correct serial number on the card. The benefit is a good model for `two-factor authentication <http://en.wikipedia.org/wiki/Two-factor_authentication>`_, something you have and something you know. In this example, there is a token and a passphrase.
 
-The `YubiKey 4 or YubiKey 4 Nano <https://www.yubico.com/products/yubikey-hardware/yubikey4>` or `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ are used here. Other YubiKeys will not work, as they do not support the applet functionality.
+The `YubiKey 4 or YubiKey 4 Nano <https://www.yubico.com/products/yubikey-hardware/yubikey4>` or `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ are used here. Other YubiKeys will not work, as they do not support the applet functionality. Unless you plan to use the NFC functionality of the Yubikey NEO, it is recommended that you get Yubikey 4, which supports 4096-bit PGP keys. The NEO is limited to 2048-bit keys.
 
 Examples below are using a Fedora 23 x86_64 and Ubuntu 15.04 x86_64 fresh install. There are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
 
