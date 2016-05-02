@@ -137,7 +137,7 @@ Create a gpinstall file::
 
 Get the cap file and place it where gpinstall expects to find it::
 
-  wget -O openpgpcard.cap https://github.com/Yubico/yubico.github.com/raw/master/ykneo-openpgp/releases/ykneo-openpgp-1.0.5.cap
+  wget -O openpgpcard.cap https://github.com/Yubico/yubico.github.com/raw/master/ykneo-openpgp/releases/ykneo-openpgp-1.0.10.cap
 
 
 
