@@ -23,7 +23,7 @@ The YubiKey 4 and YubiKey NEO
 
 `Click Here <YubiKey.rst>`_ for the instructions on configuring the YubiKey 4 or YubiKey NEO for ssh authentication.
 
-.. |ImageLink| image:: http://i.creativecommons.org/l/by/4.0/88x31.png
-.. _ImageLink: http://creativecommons.org/licenses/by/4.0/
+.. image:: ccbysa_80x15.png
+   :target: `https://creativecommons.org/licenses/by-sa/4.0/`
 
-This work is licensed under a `Creative Commons Attribution 4.0 International License <http://creativecommons.org/licenses/by/4.0/>`_.
+This work is licensed under a `Creative Commons Attribution-ShareAlike 4.0 International License <https://creativecommons.org/licenses/by-sa/4.0/>`_.
