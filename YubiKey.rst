@@ -3,7 +3,7 @@ ssh-gpg-smartcard-config for YubiKey 4 and YubiKey NEO
 
 This document covers the procedure for configurating a YubiKey as a GPG smartcard for SSH authentication, it also covers setting the correct serial number on the card. The benefit is a good model for `two-factor authentication <http://en.wikipedia.org/wiki/Two-factor_authentication>`_, something you have and something you know. In this example, there is a token and a passphrase.
 
-The `YubiKey 4 or YubiKey 4 Nano <https://www.yubico.com/products/yubikey-hardware/yubikey4>` or `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ are used here. Other YubiKeys will not work, as they do not support the applet functionality.
+The `YubiKey 4 or YubiKey 4 Nano <https://www.yubico.com/products/yubikey-hardware/yubikey4>` or `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ are used here. Other YubiKeys will not work, as they do not support the applet functionality. Unless you plan to use the NFC functionality of the Yubikey NEO, it is recommended that you get Yubikey 4, which supports 4096-bit PGP keys. The NEO is limited to 2048-bit keys.
 
 Examples below are using a Fedora 23 x86_64 and Ubuntu 15.04 x86_64 fresh install. There are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
 
@@ -11,12 +11,12 @@ Configuring Authentication with GNOME-Shell
 -------------------------------------------
 To configure authentication using the previously generated GnuPG key, the GNOME-Shell needs some adjustements. With help from several resources, configure the system to allow ``gpg-agent`` to take over SSH authentication.
 
-Certain software must be installed, including utilities for the YubiKey ``libyubikey-devel`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` (``gpgsm`` on Ubuntu)i, ``pcsc-lite-ccid``, and ``pcsc-lite`` (``pcscd`` and ``libpcsclite1`` on Ubuntu).
+Certain software must be installed, including utilities for the YubiKey ``libyubikey`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` (``gpgsm`` on Ubuntu)i, ``pcsc-lite-ccid``, and ``pcsc-lite`` (``pcscd`` and ``libpcsclite1`` on Ubuntu).
 
 *Fedora*::
 
-  $ sudo dnf install ykpers-devel libyubikey-devel libusb-devel \
-     autoconf gnupg gnupg2-smime pcsc-lite pcsc-lite-ccid
+  $ sudo dnf install ykpers libyubikey \
+     gnupg gnupg2-smime pcsc-lite pcsc-lite-ccid
 
 *Ubuntu*::
 
@@ -38,7 +38,9 @@ If you have a dev key, Reboot your YubiKey (remove and reinsert) so that ykneomg
 Configure GNOME-Shell to use gpg-agent and disable ssh-agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Turn off ssh-agent inside gnome-keyring-daemon::
+Turn off ssh-agent inside gnome-keyring-daemon.
+
+For Fedora this can be achieved by creating a new file /etc/X11/xinit/Xclients.d/Xclients.gnome-session.sh or appending to the existing one. Add the following code portion::
 
   if [[ $(gconftool-2 --get /apps/gnome-keyring/daemon-components/ssh) != "false" ]]; then
     gconftool-2 --type bool --set /apps/gnome-keyring/daemon-components/ssh false
@@ -93,11 +95,11 @@ If running gnome, this problem may be solved by running the following to disable
 Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--enable-ssh-support``
 ::
 
-    if [ ! -f /tmp/gpg-agent.env ]; then
+    if [ ! -f /run/user/$(id -u)/gpg-agent.env ]; then
         killall gpg-agent;
-        eval $(gpg-agent --daemon --enable-ssh-support > /tmp/gpg-agent.env);
+        eval $(gpg-agent --daemon --enable-ssh-support > /run/user/$(id -u)/gpg-agent.env);
     fi
-    . /tmp/gpg-agent.env
+    . /run/user/$(id -u)/gpg-agent.env
 
 Now go to next step (Reload GNOME-Shell) :)
 
@@ -105,6 +107,9 @@ Reload GNOME-Shell So that the gpg-agent stuff above takes effect.
 ------------------
 
 Rebooting the machine works the best.
+After reboot, make sure that the output of the following command is false::
+
+  gconftool-2 --get /apps/gnome-keyring/daemon-components/ssh
 
 
 Get gpshell etc to fix serial number*
@@ -137,7 +142,7 @@ Create a gpinstall file::
 
 Get the cap file and place it where gpinstall expects to find it::
 
-  wget -O openpgpcard.cap https://github.com/Yubico/yubico.github.com/raw/master/ykneo-openpgp/releases/ykneo-openpgp-1.0.5.cap
+  wget -O openpgpcard.cap https://github.com/Yubico/yubico.github.com/raw/master/ykneo-openpgp/releases/ykneo-openpgp-1.0.10.cap
 
 
 
