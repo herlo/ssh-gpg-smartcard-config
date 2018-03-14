@@ -38,7 +38,9 @@ If you have a dev key, Reboot your YubiKey (remove and reinsert) so that ykneomg
 Configure GNOME-Shell to use gpg-agent and disable ssh-agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Turn off ssh-agent inside gnome-keyring-daemon::
+Turn off ssh-agent inside gnome-keyring-daemon.
+
+For Fedora this can be achieved by creating a new file /etc/X11/xinit/Xclients.d/Xclients.gnome-session.sh or appending to the existing one. Add the following code portion::
 
   if [[ $(gconftool-2 --get /apps/gnome-keyring/daemon-components/ssh) != "false" ]]; then
     gconftool-2 --type bool --set /apps/gnome-keyring/daemon-components/ssh false
@@ -105,6 +107,9 @@ Reload GNOME-Shell So that the gpg-agent stuff above takes effect.
 ------------------
 
 Rebooting the machine works the best.
+After reboot, make sure that the output of the following command is false::
+
+  gconftool-2 --get /apps/gnome-keyring/daemon-components/ssh
 
 
 Get gpshell etc to fix serial number*
