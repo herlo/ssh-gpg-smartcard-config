@@ -40,7 +40,7 @@ Configure GNOME-Shell to use gpg-agent and disable ssh-agent
 
 Turn off ssh-agent inside gnome-keyring-daemon.
 
-For Fedora this can be achieved by creating a new file /etc/X11/xinit/Xclients.d/Xclients.gnome-session.sh or appending to the existing. Add the following code portion::
+For Fedora this can be achieved by creating a new file /etc/X11/xinit/Xclients.d/Xclients.gnome-session.sh or appending to the existing one. Add the following code portion::
 
   if [[ $(gconftool-2 --get /apps/gnome-keyring/daemon-components/ssh) != "false" ]]; then
     gconftool-2 --type bool --set /apps/gnome-keyring/daemon-components/ssh false
