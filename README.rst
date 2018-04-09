@@ -2,6 +2,7 @@ Generic ssh-gpg-smartcard-config
 ========================================
  
 Configuring a gpg smart card for ssh authentication on Linux is non-trivial.
+
 `Click Here <Instructions.rst>`_ for the instructions on configuring a GPG smart card for ssh authentication.
 
 The YubiKey 4 and YubiKey NEO
