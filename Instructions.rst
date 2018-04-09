@@ -1,37 +1,64 @@
-ssh-gpg-smartcard-config
-========================
+ssh-gpg-smartcard-config for YubiKey 4 and YubiKey NEO
+========================================
 
-This document covers the procedure for configurating a system to use gpg smartcards for ssh authentication. The benefit is a good model for `two-factor authentication <http://en.wikipedia.org/wiki/Two-factor_authentication>`_, something you have and something you know. In this example, there is a token and a passphrase. 
+This document covers the procedure for configurating a YubiKey as a GPG smartcard for SSH authentication, it also covers setting the correct serial number on the card. The benefit is a good model for `two-factor authentication <http://en.wikipedia.org/wiki/Two-factor_authentication>`_, something you have and something you know. In this example, there is a token and a passphrase.
 
-The `Gemalto USB Shell Token V2 <http://shop.kernelconcepts.de/product_info.php?cPath=1_26&products_id=119>`_ and the `OpenPGP SmartCard V2 <http://shop.kernelconcepts.de/product_info.php?products_id=42&osCsid=101f6f90ee89ad616d2eca1b31dff757>`_ are used here, though there are many combinations that will work.
+The `YubiKey 4 or YubiKey 4 Nano <https://www.yubico.com/products/yubikey-hardware/yubikey4>` or `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ are used here. Other YubiKeys will not work, as they do not support the applet functionality. Unless you plan to use the NFC functionality of the Yubikey NEO, it is recommended that you get Yubikey 4, which supports 4096-bit PGP keys. The NEO is limited to 2048-bit keys.
 
-Examples below are using a Fedora 17 x86_64 fresh install, there are other tutorials for other operating systems available online. See the CREDITS section below for alternate tutorials, examples, etc.
+The same instructions should work on other GPG smart card implementations, although they were developed using the Yubikey implementation
+
+Examples below are using a Fedora 27 x86_64 and Ubuntu 15.04 x86_64 fresh install. There are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
 
 Configuring Authentication with GNOME-Shell
 -------------------------------------------
-To configure authentication using the previously generated GnuPG key, the GNOME-Shell needs some adjustements. With help from several resources, configure the system to allow ``gpg-agent`` to take over ssh authentication.
+To configure authentication using the previously generated GnuPG key, the GNOME-Shell needs some adjustements. With help from several resources, configure the system to allow ``gpg-agent`` to take over SSH authentication.
 
-Certain software must be installed, including ``gnupg2`` (which is probably already installed), ``gnupg2-smime``, ``pcsc-lite``, and ``pcsc-lite-ccid``::
+Certain software must be installed, including utilities for the YubiKey ``libyubikey`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` (``gpgsm`` on Ubuntu)i, ``pcsc-lite-ccid``, and ``pcsc-lite`` (``pcscd`` and ``libpcsclite1`` on Ubuntu).
 
-  # yum install gnupg2-smime pcsc-lite pcsc-lite-ccid
-  .. snip ..
-  Complete!
+*Fedora*::
 
-Configure GNOME-Shell to use gpg-agent
+  $ sudo dnf install ykpers libyubikey \
+     gnupg gnupg2-smime pcsc-lite pcsc-lite-ccid
+
+*Ubuntu*::
+
+  $ sudo apt-get install gnupg-agent gnupg2 pinentry-gtk2 scdaemon \
+     libccid pcscd libpcsclite1 gpgsm yubikey-personalization \
+     libyubikey-dev libykpers-1-dev
+
+**Optional**: Install the `YubiKey NEO Manager GUI <https://developers.yubico.com/yubikey-neo-manager/>`_. If running Ubuntu, you can install the YubiKey NEO manager and other YubiKey software from the `Yubico PPA <https://launchpad.net/~yubico/+archive/ubuntu/stable>`_.
+
+Enable your YubiKey’s Smartcard interface (CCID)
+-----------------------------------------------------
+This will enable the smartcard portion of your YubiKey::
+This is not required for YubiKey 4.
+
+  $ ykpersonalize -m82
+
+If you have a dev key, Reboot your YubiKey (remove and reinsert) so that ykneomgr works.
+
+Configure GNOME-Shell to use gpg-agent and disable ssh-agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Turn off ssh-agent inside gnome-keyring-daemon::
+Turn off ssh-agent inside gnome-keyring-daemon.
 
-  $ gconftool-2 --type bool --set /apps/gnome-keyring/daemon-components/ssh false
+For Fedora this can be achieved by creating a new file /etc/X11/xinit/Xclients.d/Xclients.gnome-session.sh or appending to the existing one. Add the following code portion::
 
-Configure gpg to use agent (only for smartcard)::
+  if [[ $(gconftool-2 --get /apps/gnome-keyring/daemon-components/ssh) != "false" ]]; then
+    gconftool-2 --type bool --set /apps/gnome-keyring/daemon-components/ssh false
+  fi
 
-  $ gpg --list-keys | head -n 1
+Configure GPG to use its agent (only for smartcard)::
+
   $ echo "use-agent" >> ~/.gnupg/gpg.conf
 
 Enable ssh-agent drop in replacement support for gpg-agent::
 
   $ echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
+
+Allow admin actions on your YubiKey (if your gnupg version is < 2.0.11)::
+
+  $ echo "allow-admin" >>  ~/.gnupg/scdaemon.conf
 
 Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Ubuntu)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -64,36 +91,45 @@ Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication
 If running gnome, this problem may be solved by running the following to disable gnome-keyring from autostarting its broken gpg-agent and ssh-agent implementation::
 
   mv /etc/xdg/autostart/gnome-keyring-gpg.desktop /etc/xdg/autostart/gnome-keyring-gpg.desktop.inactive
-
+    
   mv /etc/xdg/autostart/gnome-keyring-ssh.desktop /etc/xdg/autostart/gnome-keyring-ssh.desktop.inactive
 
 Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--enable-ssh-support``
 ::
 
-    if [ ! -f /tmp/gpg-agent.env ]; then
-        killall gpg-agent;
-        eval $(gpg-agent --daemon --enable-ssh-support > /tmp/gpg-agent.env);
+    # Start gpg-agent if it's not running
+    if ! pidof gpg-agent > /dev/null; then
+        gpg-agent --homedir $HOME/.gnupg --daemon --sh --enable-ssh-support > $HOME/.gnupg/env
     fi
-    . /tmp/gpg-agent.env
+    if [ -f "$HOME/.gnupg/env" ]; then
+        source $HOME/.gnupg/env
+    fi
+    gpg-connect-agent updatestartuptty /bye > /dev/null 2>&1
 
 Now go to next step (Reload GNOME-Shell) :)
 
-Reload GNOME-Shell
+Reload GNOME-Shell So that the gpg-agent stuff above takes effect. 
 ------------------
 
-Reboot the machine works the best.
+Rebooting the machine works the best.
+After reboot, make sure that the output of the following command is false::
+
+  gconftool-2 --get /apps/gnome-keyring/daemon-components/ssh
+
 
 Setting PINs
 ------------
 
-Included with the gemalto token and GnuPG Smartcard version 2 should be a document describing the default PIN values. There is a regular PIN, which is used to unlock the token for Signing, Encryption or Authentication. Additionally, there is an Admin PIN, which is used to reset the PIN and/or the Reset Code for the key itself.
+There is a regular PIN, which is used to unlock the token for Signing, Encryption or Authentication. Additionally, there is an admin PIN, which is used to reset the PIN and/or the Reset Code for the key itself.
 
-Admin PIN
-~~~~~~~~~
+
+Complete these steps for PIN and then Admin Pin
+~~~~~~~~~~~~~~~~~
+default pins are 123456 and 12345678 respectivly 
 
 ::
 
-  $ gpg --card-edit
+  $ gpg2 --card-edit
   ..snip..
 
   gpg/card> admin
@@ -144,9 +180,9 @@ Then enter the New PIN twice
 Generating an SSH Key using GnuPG
 ---------------------------------
 
-There are several ways to generate an SSH Key using GnuPG. A common way is to link the new Authentication key to an already existing key::
+There are several ways to generate an SSH Key using GnuPG. A common way is to link the new authentication key to an already existing key::
 
-  $ gpg --edit-key 8A8F1D53
+  $ gpg2 --edit-key 8A8F1D53
   gpg (GnuPG) 1.4.12; Copyright (C) 2012 Free Software Foundation, Inc.
   This is free software: you are free to change and redistribute it.
   There is NO WARRANTY, to the extent permitted by law.
@@ -176,6 +212,8 @@ Once in the ``edit-key`` dialog, create a key on the card::
      (2) Encryption key
      (3) Authentication key
   Your selection? 3
+  
+  IT WILL PROMPT YOU TO ENTER THE ADMIN PIN, AND THEN THE REGULAR PIN. Don't fat finger this part!
 
   gpg: WARNING: such a key has already been stored on the card!
 
@@ -222,52 +260,6 @@ Assuming everything above is configured correctly, a simple test is performed wi
   $ ssh-add -L
   ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDL/XmU......BL0luE= cardno:00050000158A
 
-Resetting the GPG SmartCard
----------------------------
-
-In some cases, it's going to be useful to rest the SmartCard. It can be done interactively::
-
-  $ gpg-connect-agent
-  > /hex
-  > scd serialno
-  S SERIALNO D276000124...........00016E00000 0
-  OK
-  > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.
-  OK
-  > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.
-  OK
-  > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.
-  OK
-  > scd apdu 00 20 00 81 08 40 40 40 40 40 40 40 40
-  D[0000]  69 83                                              i.
-  OK
-  > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.
-  OK
-  > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.
-  OK
-  > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
-  D[0000]  69 82                                              i.
-  OK
-  > scd apdu 00 20 00 83 08 40 40 40 40 40 40 40 40
-  D[0000]  69 83                                              i.
-  OK
-  > scd apdu 00 e6 00 00
-  D[0000]  90 00                                              ..
-  OK
-  > scd apdu 00 44 00 00
-  D[0000]  90 00                                              ..
-  OK
-  > /echo card has been reset to factory defaults
-  card has been reset to factory defaults
-  > /bye
-
-**NOTE:** If desired, this file can be stored them in a file and run with "gpg-connect-agent < FILE".
-
 FILES
 -----
 
@@ -278,6 +270,8 @@ CREDITS
 
 A special thanks to the following people and/or links.
 
-  * `How to use gpg with ssh (with smartcard section) <http://www.programmierecke.net/howto/gpg-ssh.html>`_
+  * `How to use GPG with SSH (with smartcard section) <http://www.programmierecke.net/howto/gpg-ssh.html>`_
   * `The GnuPG Smartcard HOWTO (Advanced Features) <http://www.gnupg.org/howtos/card-howto/en/smartcard-howto-single.html#id2507402>`_
   * `Smart Cards and Secret Agents <http://blog.flameeyes.eu/2010/08/smart-cards-and-secret-agents>`_
+  * `How to mitigate issues between gnupg and gnome keyring manager <http://wiki.gnupg.org/GnomeKeyring>`_
+  * `Useful info on how to start the correct agent at login <http://www.bootc.net/archives/2013/06/09/my-perfect-gnupg-ssh-agent-setup/>`_

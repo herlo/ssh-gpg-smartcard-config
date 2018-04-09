@@ -1,1 +1,0 @@
-[ -f ${HOME}/.xsession ] && source ${HOME}/.xsession
