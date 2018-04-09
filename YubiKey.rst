@@ -5,7 +5,9 @@ This document covers the procedure for configurating a YubiKey as a GPG smartcar
 
 The `YubiKey 4 or YubiKey 4 Nano <https://www.yubico.com/products/yubikey-hardware/yubikey4>` or `YubiKey Neo <https://www.yubico.com/products/yubikey-hardware/yubikey-neo>`_ are used here. Other YubiKeys will not work, as they do not support the applet functionality. Unless you plan to use the NFC functionality of the Yubikey NEO, it is recommended that you get Yubikey 4, which supports 4096-bit PGP keys. The NEO is limited to 2048-bit keys.
 
-Examples below are using a Fedora 23 x86_64 and Ubuntu 15.04 x86_64 fresh install. There are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
+The same instructions should work on other GPG smart card implementations, although they were developed using the Yubikey implementation
+
+Examples below are using a Fedora 27 x86_64 and Ubuntu 15.04 x86_64 fresh install. There are other tutorials for other operating systems and keys available online. See the CREDITS section below for alternate tutorials, examples, etc.
 
 Configuring Authentication with GNOME-Shell
 -------------------------------------------
@@ -114,55 +116,6 @@ After reboot, make sure that the output of the following command is false::
 
   gconftool-2 --get /apps/gnome-keyring/daemon-components/ssh
 
-
-Get gpshell etc to fix serial number*
---------------------------------
-#\* This section not relevant to a consumer edition NEO, it can still be relevant to a developer edition NEO. This section has not been tested with Ubuntu.
-
-Install gpshell binary and libs from tykeal's repo::
-
-  $ sudo yum install http://copr-be.cloud.fedoraproject.org/results/tykeal/GlobalPlatform/fedora-19-x86_64/tykeal-GlobalPlatform-release-0.0.1-1.fc19/tykeal-GlobalPlatform-release-0.0.1-1.fc19.x86_64.rpm
-
-  sudo yum install gpshell gppcscconnectionplugin
-
-
-Create a gpinstall file::
-
-  cat <<EOF >> gpinstall.txt
-  mode_211
-  enable_trace
-  establish_context
-  card_connect
-  select -AID a000000003000000
-  open_sc -security 1 -keyind 0 -keyver 0 -mac_key 404142434445464748494a4b4c4d4e4f -enc_key 404142434445464748494a4b4c4d4e4f
-  delete -AID D2760001240102000000000000010000
-  delete -AID D27600012401
-  install -file openpgpcard.cap -instParam 00 -priv 00
-  card_disconnect
-  release_context
-  EOF
-
-
-Get the cap file and place it where gpinstall expects to find it::
-
-  wget -O openpgpcard.cap https://github.com/Yubico/yubico.github.com/raw/master/ykneo-openpgp/releases/ykneo-openpgp-1.0.10.cap
-
-
-
-put the correct serial number into gpinstall.txt:: 
-
-  if ykneomgr -s; then
-    sed -i "s/^install.*/& -instAID D276000124010200006"$(printf %08d "$(ykneomgr -s)")"0000/" gpinstall.txt
-  fi
-
-
-Flash the card\*::
-
-  gpshell gpinstall.txt
-
-#\* WARNING This erases all existing keys on the smartcard
-
-#\* End section not relevant to a consumer edition NEO
 
 Setting PINs
 ------------
