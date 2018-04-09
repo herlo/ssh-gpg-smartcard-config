@@ -70,11 +70,14 @@ If running gnome, this problem may be solved by running the following to disable
 Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--enable-ssh-support``
 ::
 
-    if [ ! -f /tmp/gpg-agent.env ]; then
-        killall gpg-agent;
-        eval $(gpg-agent --daemon --enable-ssh-support > /tmp/gpg-agent.env);
+    # Start gpg-agent if it's not running
+    if ! pidof gpg-agent > /dev/null; then
+        gpg-agent --homedir $HOME/.gnupg --daemon --sh --enable-ssh-support > $HOME/.gnupg/env
     fi
-    . /tmp/gpg-agent.env
+    if [ -f "$HOME/.gnupg/env" ]; then
+        source $HOME/.gnupg/env
+    fi
+    gpg-connect-agent updatestartuptty /bye > /dev/null 2>&1
 
 Now go to next step (Reload GNOME-Shell) :)
 
