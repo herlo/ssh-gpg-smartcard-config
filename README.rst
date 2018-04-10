@@ -1,10 +1,11 @@
-Generic ssh-gpg-smartcard-config
+ssh-gpg-smartcard-config
 ================================
 
 Configuring your system use a GPG smart card for SSH authentication:
 
-- `Linux <Instructions.rst>`_
+- `Linux <Linux.rst>`_
 - `macOS <instructions-mac.rst>`_
+- `Windows <Windows.rst>`_
 
 The YubiKey 4 and YubiKey NEO
 -----------------------------
