@@ -16,7 +16,7 @@ Install packages
 
 ::
 
-    $ brew install gpg-agent gpg2 pidof
+    $ brew install gpg-agent gpg2 pidof pinentry-mac
 
 Homebrew's version of gpg2 will be located at ``/usr/local/bin/gpg2``.
 
@@ -45,7 +45,7 @@ Edit the file ``$HOME/.gnupg/gpg-agent.conf`` and copy paste the following into 
     use-standard-socket
     default-cache-ttl 600
     max-cache-ttl 7200
-    debug-level advanced
+    debug-level 9
     log-file $HOME/.gnupg/gpg-agent.log
 
 Directory Permissions

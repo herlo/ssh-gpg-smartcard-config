@@ -13,12 +13,11 @@ Configuring Authentication with GNOME-Shell
 -------------------------------------------
 To configure authentication using the previously generated GnuPG key, the GNOME-Shell needs some adjustements. With help from several resources, configure the system to allow ``gpg-agent`` to take over SSH authentication.
 
-Certain software must be installed, including utilities for the YubiKey ``libyubikey`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` (``gpgsm`` on Ubuntu)i, ``pcsc-lite-ccid``, and ``pcsc-lite`` (``pcscd`` and ``libpcsclite1`` on Ubuntu).
+Certain software must be installed, including utilities for the YubiKey ``libyubikey`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), and ``gnupg2-smime`` (``gpgsm`` on Ubuntu).
 
 *Fedora*::
 
-  $ sudo dnf install ykpers libyubikey \
-     gnupg gnupg2-smime pcsc-lite pcsc-lite-ccid
+  $ sudo dnf install ykpers libyubikey gnupg gnupg2-smime
 
 *Ubuntu*::
 
