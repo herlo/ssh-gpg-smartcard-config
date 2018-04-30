@@ -1,7 +1,7 @@
 ssh-gpg-smartcard-config
 ================================
 
-Configuring your system use a GPG smart card for SSH authentication:
+To configure your system to use a GPG smart card for SSH authentication:
 
 - `Linux <Linux.rst>`_
 - `macOS <macOS.rst>`_
