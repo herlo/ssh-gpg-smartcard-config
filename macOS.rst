@@ -16,7 +16,7 @@ Install packages
 
 ::
 
-    $ brew install gpg-agent gpg2 pidof pinentry-mac
+    $ brew install gpg2 pidof pinentry-mac
 
 Homebrew's version of gpg2 will be located at ``/usr/local/bin/gpg2``.
 
@@ -41,11 +41,9 @@ Edit the file ``$HOME/.gnupg/gpg-agent.conf`` and copy paste the following into 
 
     pinentry-program /usr/local/bin/pinentry-mac
     enable-ssh-support
-    write-env-file
-    use-standard-socket
     default-cache-ttl 600
     max-cache-ttl 7200
-    debug-level 9
+    debug-level basic
     log-file $HOME/.gnupg/gpg-agent.log
 
 Directory Permissions
@@ -62,11 +60,8 @@ The following will work in both Bash and ZSH.
 
 Edit your ``$HOME/.bashrc`` or ``$HOME/.zshrc`` file and add the following at the bottom::
 
-    # Add homebrew's gpg-agent binary to the path
-    PATH="/usr/local/opt/gpg-agent/bin:$PATH"
-
     # Start gpg-agent if it's not running
-    if ! pidof gpg-agent > /dev/null; then
+    if [ -z "$(pidof gpg-agent 2> /dev/null)" ]; then
         gpg-agent --homedir $HOME/.gnupg --daemon --sh --enable-ssh-support > $HOME/.gnupg/env
     fi
 
@@ -74,9 +69,6 @@ Edit your ``$HOME/.bashrc`` or ``$HOME/.zshrc`` file and add the following at th
     if [ -f "$HOME/.gnupg/env" ]; then
         source $HOME/.gnupg/env
     fi
-
-    # Ensure the ssh auth socket is set correctly
-    export SSH_AUTH_SOCK="$HOME/.gnupg/S.gpg-agent.ssh"
 
 You can also put the above script in a separate file and source it into your rc file. Which ever
 works for you.
