@@ -1,5 +1,5 @@
 ssh-gpg-smartcard-config for YubiKey 4 and YubiKey NEO
-========================================
+======================================================
 
 This document covers the procedure for configurating a YubiKey as a GPG smartcard for SSH authentication, it also covers setting the correct serial number on the card. The benefit is a good model for `two-factor authentication <http://en.wikipedia.org/wiki/Two-factor_authentication>`_, something you have and something you know. In this example, there is a token and a passphrase.
 
@@ -13,12 +13,11 @@ Configuring Authentication with GNOME-Shell
 -------------------------------------------
 To configure authentication using the previously generated GnuPG key, the GNOME-Shell needs some adjustements. With help from several resources, configure the system to allow ``gpg-agent`` to take over SSH authentication.
 
-Certain software must be installed, including utilities for the YubiKey ``libyubikey`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), ``gnupg2-smime`` (``gpgsm`` on Ubuntu)i, ``pcsc-lite-ccid``, and ``pcsc-lite`` (``pcscd`` and ``libpcsclite1`` on Ubuntu).
+Certain software must be installed, including utilities for the YubiKey ``libyubikey`` (``libyubikey-dev`` on Ubuntu), ``gnupg2`` (which is probably already installed), and ``gnupg2-smime`` (``gpgsm`` on Ubuntu).
 
 *Fedora*::
 
-  $ sudo dnf install ykpers libyubikey \
-     gnupg gnupg2-smime pcsc-lite pcsc-lite-ccid
+  $ sudo dnf install ykpers libyubikey gnupg gnupg2-smime
 
 *Ubuntu*::
 
@@ -38,7 +37,7 @@ This is not required for YubiKey 4.
 If you have a dev key, Reboot your YubiKey (remove and reinsert) so that ykneomgr works.
 
 Configure GNOME-Shell to use gpg-agent and disable ssh-agent
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Turn off ssh-agent inside gnome-keyring-daemon.
 
@@ -61,7 +60,7 @@ Allow admin actions on your YubiKey (if your gnupg version is < 2.0.11)::
   $ echo "allow-admin" >>  ~/.gnupg/scdaemon.conf
 
 Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Ubuntu)
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Open Startup Applications
 
 Uncheck "GPG Password Agent" and "SSH Key Agent"
@@ -87,11 +86,11 @@ Disable the other system gpg-agent::
 Note: We could have used the Xsession gpg-agent and trashed the upstart one, but there is an `open bug report <https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=642021>`_ for 90gpg-agent. Also, the upstart script has the capability of exporting the environment variables globally with initctl set-env --global.
 
 Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Fedora)
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 If running gnome, this problem may be solved by running the following to disable gnome-keyring from autostarting its broken gpg-agent and ssh-agent implementation::
 
   mv /etc/xdg/autostart/gnome-keyring-gpg.desktop /etc/xdg/autostart/gnome-keyring-gpg.desktop.inactive
-    
+
   mv /etc/xdg/autostart/gnome-keyring-ssh.desktop /etc/xdg/autostart/gnome-keyring-ssh.desktop.inactive
 
 Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--enable-ssh-support``
@@ -108,8 +107,8 @@ Next, place the following in ``~/.bashrc`` to ensure gpg-agent starts with ``--e
 
 Now go to next step (Reload GNOME-Shell) :)
 
-Reload GNOME-Shell So that the gpg-agent stuff above takes effect. 
-------------------
+Reload GNOME-Shell So that the gpg-agent stuff above takes effect.
+------------------------------------------------------------------
 
 Rebooting the machine works the best.
 After reboot, make sure that the output of the following command is false::
@@ -124,8 +123,8 @@ There is a regular PIN, which is used to unlock the token for Signing, Encryptio
 
 
 Complete these steps for PIN and then Admin Pin
-~~~~~~~~~~~~~~~~~
-default pins are 123456 and 12345678 respectivly 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+default pins are 123456 and 12345678 respectivly
 
 ::
 
@@ -212,7 +211,7 @@ Once in the ``edit-key`` dialog, create a key on the card::
      (2) Encryption key
      (3) Authentication key
   Your selection? 3
-  
+
   IT WILL PROMPT YOU TO ENTER THE ADMIN PIN, AND THEN THE REGULAR PIN. Don't fat finger this part!
 
   gpg: WARNING: such a key has already been stored on the card!
