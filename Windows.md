@@ -29,7 +29,7 @@ after removing and re-inserting the YubiKey, or after your computer has
 been in sleep mode, etc. This can be resolved by restarting gpg-agent
 using the following commands:
 
-gpg-connect-agent killagent /bye gpg-connect-agent /bye
+`gpg-connect-agent killagent /bye gpg-connect-agent /bye`
 
 You might want to put these commands in a BAT-file for quick access.
 
@@ -42,13 +42,13 @@ GPG4Win can act as a drop-in replacement for Pageant. Enabling this is
 done by creating (or editing) the gpg-agent.conf file and adding the
 following line to it:
 
-enable-putty-support
+`enable-putty-support`
 
-The file is found in the gnupg directory: %APPDATA%gnupg(at least on
+The file is found in the gnupg directory: %APPDATA%\gnupg (at least on
 Windows 10). The gpg-agent will need to be restarted (as described in
 the previous section) for this change to take effect. Once enabled, any
 application which supports SSH authentication using Pageant should
-\"just work\".
+"just work".
 
 PuTTY
 -----
