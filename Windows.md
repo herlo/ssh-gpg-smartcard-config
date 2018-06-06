@@ -15,7 +15,7 @@ latest version. You will also need to autostart gpg-connect-agent.exe
 (which comes with GPG4Win) when your computer starts. You can do this by
 creating a shortcut to 
 
-`"C:Program Files (x86)\GNU\GnuPG\gpg-connect-agent.exe" /bye`
+`"C:\Program Files (x86)\GNU\GnuPG\gpg-connect-agent.exe" /bye`
 
 and placing it in your Startup program group in your Start menu.
 Changing the Run: setting from Normal window to Minimized makes it
@@ -57,4 +57,4 @@ PuTTY
 -----
 
 If you've installed GPG4Win and enabled PuTTY support, then PuTTY should
-work out of the box. You can download and install PuTTY here.
+work out of the box. You can download and install PuTTY [here](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html).
