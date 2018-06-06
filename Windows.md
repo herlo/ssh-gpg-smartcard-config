@@ -29,7 +29,10 @@ after removing and re-inserting the YubiKey, or after your computer has
 been in sleep mode, etc. This can be resolved by restarting gpg-agent
 using the following commands:
 
-`gpg-connect-agent killagent /bye gpg-connect-agent /bye`
+```
+gpg-connect-agent killagent /bye
+gpg-connect-agent /bye
+```
 
 You might want to put these commands in a BAT-file for quick access.
 
