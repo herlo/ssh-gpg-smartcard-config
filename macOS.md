@@ -1,5 +1,5 @@
-Setup GPG Agent for macOS
-=========================
+SSH authentication using a GPG smart card on macOS
+==================================================
 
 This document doesn\'t go into setting up a GPG smartcard with keys,
 only how to setup the GPG smartcard agent. These instructions should
