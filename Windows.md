@@ -1,11 +1,5 @@
-Setting up SSH authentication using a GPG smart card on Windows
-===============================================================
-
-Follow the instructions at
-<https://developers.yubico.com/PGP/SSH_authentication/Windows.html>
-
 SSH authentication using a GPG smart card on Windows
-----------------------------------------------------
+===============================================================
 
 The YubiKey 4 and YubiKey NEO support the OpenPGP interface for smart
 cards which can be used with GPG4Win for encryption and signing, as well
@@ -21,7 +15,7 @@ latest version. You will also need to autostart gpg-connect-agent.exe
 (which comes with GPG4Win) when your computer starts. You can do this by
 creating a shortcut to 
 
-"C:Program Files (x86)\GNU\GnuPG\gpg-connect-agent.exe" /bye
+`"C:Program Files (x86)\GNU\GnuPG\gpg-connect-agent.exe" /bye`
 
 and placing it in your Startup program group in your Start menu.
 Changing the Run: setting from Normal window to Minimized makes it
