@@ -19,10 +19,13 @@ GPG4Win
 First things first. The core of everything is GPG4Win. Install the
 latest version. You will also need to autostart gpg-connect-agent.exe
 (which comes with GPG4Win) when your computer starts. You can do this by
-creating a shortcut to \"C:Program Files
-(x86)GNUGnuPGgpg-connect-agent.exe\" /bye and placing it in your Startup
-program group in your Start menu. Changing the Run: setting from Normal
-window to Minimized makes it slightly less obtrusive at login.
+creating a shortcut to 
+
+"C:Program Files (x86)\GNU\GnuPG\gpg-connect-agent.exe" /bye
+
+and placing it in your Startup program group in your Start menu.
+Changing the Run: setting from Normal window to Minimized makes it
+slightly less obtrusive at login.
 
 If you haven't already, you will need to setup a PGP key on your NEO.
 
@@ -32,8 +35,9 @@ after removing and re-inserting the YubiKey, or after your computer has
 been in sleep mode, etc. This can be resolved by restarting gpg-agent
 using the following commands:
 
-gpg-connect-agent killagent /bye gpg-connect-agent /bye You might want
-to put these commands in a BAT-file for quick access.
+gpg-connect-agent killagent /bye gpg-connect-agent /bye
+
+You might want to put these commands in a BAT-file for quick access.
 
 Enable SSH authentication
 -------------------------
