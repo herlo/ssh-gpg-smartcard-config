@@ -54,8 +54,8 @@ PPA](https://launchpad.net/~yubico/+archive/ubuntu/stable).
 Enable your YubiKey's Smartcard interface (CCID)
 ------------------------------------------------
 
-This will enable the smartcard portion of your YubiKey:: This is not
-required for YubiKey 4.
+This will enable the smartcard portion of your YubiKey:: This is only
+required for the YubiKey NEO.
 
 > \$ ykpersonalize -m82
 
