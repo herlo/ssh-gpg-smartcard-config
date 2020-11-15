@@ -1,0 +1,10 @@
+#!/bin/bash
+pandoc README.md -f markdown -t html -s -o index.html
+perl -p -i -e 's|Linux.md|linux.html|g' index.html
+perl -p -i -e 's|macOS.md|macOS.html|g' index.html
+perl -p -i -e 's|Windows.md|windows.html|g' index.html
+pandoc Linux.md -f markdown -t html -s -o linux.html
+pandoc macOS.md -f markdown -t html -s -o macOS.html
+pandoc Windows.md -f markdown -t html -s -o windows.html
+scp *.html nb@linux:public_html/smartcard
+scp *.png nb@linux:public_html/smartcard
