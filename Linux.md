@@ -10,18 +10,15 @@ token and a passphrase.
 
 The
 [YubiKey 5 Series](https://www.yubico.com/products/yubikey-5-overview/)
-or [YubiKey
-Neo](https://www.yubico.com/products/yubikey-hardware/yubikey-neo) are
-used here. Other YubiKeys will not work, as they do not support the
-applet functionality. Unless you plan to use the NFC functionality of
-the Yubikey NEO, it is recommended that you get Yubikey 4, which
-supports 4096-bit PGP keys. The NEO is limited to 2048-bit keys.
+is used here.  The YubiKey 4 or YubiKey NEO will also work, although
+the YubiKey NEO is limited to 2048-bit RSA keys, and the YubiKey 4 does
+not support ECC keys.
 
 The same instructions should work on other GPG smart card
 implementations, although they were developed using the Yubikey
 implementation
 
-Examples below are using a Fedora 27 x86\_64 and Ubuntu 15.04 x86\_64
+Examples below are using a Fedora 33 x86\_64 and Ubuntu 15.04 x86\_64
 fresh install. There are other tutorials for other operating systems and
 keys available online. See the CREDITS section below for alternate
 tutorials, examples, etc.
