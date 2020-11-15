@@ -27,7 +27,7 @@ Configuring Authentication with GNOME-Shell
 -------------------------------------------
 
 To configure authentication using the previously generated GnuPG key,
-the GNOME-Shell needs some adjustements. With help from several
+the GNOME-Shell needs some adjustments. With help from several
 resources, configure the system to allow `gpg-agent` to take over SSH
 authentication.
 
