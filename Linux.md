@@ -2,8 +2,7 @@ SSH authentication using a GPG smart card on Linux
 ==================================================
 
 This document covers the procedure for configurating a YubiKey as a GPG
-smartcard for SSH authentication, it also covers setting the correct
-serial number on the card. The benefit is a good model for [two-factor
+smartcard for SSH authentication. The benefit is a good model for [two-factor
 authentication](http://en.wikipedia.org/wiki/Two-factor_authentication),
 something you have and something you know. In this example, there is a
 token and a passphrase.
