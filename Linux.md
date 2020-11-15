@@ -9,7 +9,7 @@ something you have and something you know. In this example, there is a
 token and a passphrase.
 
 The
-YubiKey 4 or YubiKey 4 Nano \<https://www.yubico.com/products/yubikey-hardware/yubikey4\>
+[YubiKey 5 Series](https://www.yubico.com/products/yubikey-5-overview/)
 or [YubiKey
 Neo](https://www.yubico.com/products/yubikey-hardware/yubikey-neo) are
 used here. Other YubiKeys will not work, as they do not support the

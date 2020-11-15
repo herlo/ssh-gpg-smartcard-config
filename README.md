@@ -8,12 +8,10 @@ visit the appropriate link below:
 -   [macOS](macOS.md)
 -   [Windows](Windows.md)
 
-The YubiKey 4 and YubiKey NEO
+The YubiKey 5 Series
 -----------------------------
 
 -   [YubiKey 5 Series](https://www.yubico.com/products/yubikey-5-overview/)
--   [YubiKey
-    NEO](https://www.yubico.com/products/yubikey-hardware/yubikey-neo)
 
 The Gemalto USB Shell Token
 ---------------------------
