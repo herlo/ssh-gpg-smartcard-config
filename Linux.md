@@ -183,11 +183,11 @@ default pins are 123456 and 12345678 respectivly
 
 Enter the Current Admin PIN
 
-![image](http://sexysexypenguins.com/misc/gpg-admin.png)
+![image](gpg-admin.png)
 
 Then enter the New Admin PIN twice
 
-![image](http://sexysexypenguins.com/misc/gpg-new-admin.png)
+![image](gpg-new-admin.png)
 
 ### PIN
 
@@ -201,11 +201,11 @@ Then enter the New Admin PIN twice
 
 Enter the Current PIN
 
-![image](http://sexysexypenguins.com/misc/gpg-pin.png)
+![image](gpg-pin.png)
 
 Then enter the New PIN twice
 
-![image](http://sexysexypenguins.com/misc/gpg-new-pin.png)
+![image](gpg-new-pin.png)
 
 **NOTE:** If the Admin PIN has not been entered, it may be required
 before changes are applied.
