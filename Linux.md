@@ -85,6 +85,10 @@ Enable ssh-agent drop in replacement support for gpg-agent:
 
     $ echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
 
+Disable CCID to avoid conflicting with pcscd
+
+    $ echo "disable-ccid" >> ~/.gnupg/scdaemon.conf
+
 Allow admin actions on your YubiKey (if your gnupg version is \<
 2.0.11):
 
