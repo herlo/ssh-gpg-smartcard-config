@@ -9,4 +9,4 @@ pandoc Windows.md -f markdown -t html -s -o windows.html
 scp *.html nb@linux:public_html/smartcard
 #scp *.png nb@linux:public_html/smartcard
 scp *.html root@nb.prgmr.com:/data/www/smartcard
-scp *.png root@nb.prgmr.com:/data/www/smartcard
+#scp *.png root@nb.prgmr.com:/data/www/smartcard
