@@ -85,8 +85,8 @@ Disable pcscd to avoid conflicting with GPG/scdaemon's built in CCID:
 
     $ systemctl disable pcscd.socket --now
     $ systemctl disable pcscd.service --now
-    $ systemctl mask pcscd.socket --now
-    $ systemctl mask pcscd.service --now
+    $ systemctl mask pcscd.socket
+    $ systemctl mask pcscd.service
 
 Allow admin actions on your YubiKey (if your gnupg version is \<
 2.0.11):
