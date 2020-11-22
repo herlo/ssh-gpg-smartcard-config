@@ -36,11 +36,11 @@ already installed), and `gnupg2-smime` (`gpgsm` on Ubuntu).
 
 *Fedora*:
 
-    $ sudo dnf install ykpers libyubikey gnupg gnupg2-smime
+    sudo dnf install ykpers libyubikey gnupg gnupg2-smime
 
 *Ubuntu*:
 
-    $ sudo apt-get install gnupg-agent gnupg2 pinentry-gtk2 scdaemon \
+    sudo apt-get install gnupg-agent gnupg2 pinentry-gtk2 scdaemon \
        libccid pcscd libpcsclite1 gpgsm yubikey-personalization \
        libyubikey-dev libykpers-1-dev
 
@@ -56,7 +56,7 @@ Enable your YubiKey's Smartcard interface (CCID)
 This will enable the smartcard portion of your YubiKey:: This is only
 required for the YubiKey NEO.
 
-> \$ ykpersonalize -m82
+    ykpersonalize -m82
 
 If you have a dev key, Reboot your YubiKey (remove and reinsert) so that
 ykneomgr works.
@@ -75,23 +75,23 @@ existing one. Add the following code portion:
 
 Configure GPG to use its agent (only for smartcard):
 
-    $ echo "use-agent" >> ~/.gnupg/gpg.conf
+    echo "use-agent" >> ~/.gnupg/gpg.conf
 
 Enable ssh-agent drop in replacement support for gpg-agent:
 
-    $ echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
+    echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
 
 Disable pcscd to avoid conflicting with GPG/scdaemon's built in CCID:
 
-    $ systemctl disable pcscd.socket --now
-    $ systemctl disable pcscd.service --now
-    $ systemctl mask pcscd.socket
-    $ systemctl mask pcscd.service
+    systemctl disable pcscd.socket --now
+    systemctl disable pcscd.service --now
+    systemctl mask pcscd.socket
+    systemctl mask pcscd.service
 
 Allow admin actions on your YubiKey (if your gnupg version is \<
 2.0.11):
 
-    $ echo "allow-admin" >>  ~/.gnupg/scdaemon.conf
+    echo "allow-admin" >>  ~/.gnupg/scdaemon.conf
 
 #### Intercept gnome-keyring-daemon and put gpg-agent in place for ssh authentication (Ubuntu)
 
@@ -167,7 +167,7 @@ is used to reset the PIN and/or the Reset Code for the key itself.
 
 default pins are 123456 and 12345678 respectivly
 
-    $ gpg2 --card-edit
+    gpg2 --card-edit
     ..snip..
 
     gpg/card> admin
@@ -219,7 +219,7 @@ Generating an SSH Key using GnuPG
 There are several ways to generate an SSH Key using GnuPG. A common way
 is to link the new authentication key to an already existing key:
 
-    $ gpg2 --edit-key 8A8F1D53
+    gpg2 --edit-key 8A8F1D53
     gpg (GnuPG) 1.4.12; Copyright (C) 2012 Free Software Foundation, Inc.
     This is free software: you are free to change and redistribute it.
     There is NO WARRANTY, to the extent permitted by law.
@@ -288,7 +288,7 @@ Upon completion of the key, be sure to save the record to the card and
 gpg key:
 
     gpg> save
-    $
+    
 
 Verify SSH key is managed via gpg-agent
 ---------------------------------------
@@ -296,7 +296,7 @@ Verify SSH key is managed via gpg-agent
 Assuming everything above is configured correctly, a simple test is
 performed with the SmartCard inserted:
 
-    $ ssh-add -L
+    ssh-add -L
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDL/XmU......BL0luE= cardno:00050000158A
 
 FILES
