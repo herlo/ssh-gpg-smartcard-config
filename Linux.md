@@ -99,7 +99,7 @@ Open Startup Applications
 
 Uncheck \"GPG Password Agent\" and \"SSH Key Agent\"
 
-![image](startup_apps_checked.png)
+![Startup Apps](startup_apps_checked.png)
 
 Edit `/usr/share/upstart/sessions/gpg-agent.conf` so that the pre-start
 script contains the following:
@@ -186,11 +186,11 @@ default pins are 123456 and 12345678 respectivly
 
 Enter the Current Admin PIN
 
-![image](gpg-admin.png)
+![current admin PIN](gpg-admin.png)
 
 Then enter the New Admin PIN twice
 
-![image](gpg-new-admin.png)
+![new admin PIN](gpg-new-admin.png)
 
 ### PIN
 
@@ -204,11 +204,11 @@ Then enter the New Admin PIN twice
 
 Enter the Current PIN
 
-![image](gpg-pin.png)
+![current PIN](gpg-pin.png)
 
 Then enter the New PIN twice
 
-![image](gpg-new-pin.png)
+![new PIN](gpg-new-pin.png)
 
 **NOTE:** If the Admin PIN has not been entered, it may be required
 before changes are applied.
